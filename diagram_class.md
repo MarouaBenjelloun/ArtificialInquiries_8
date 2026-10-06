@@ -1,3 +1,4 @@
+```mermaid
 classDiagram
     class Exercise {
         +id
@@ -39,12 +40,12 @@ classDiagram
     Exercise "1" --> "1..*" Task : contains
     Exercise "1" --> "4" Model : tests
 
-    Partner "1" --> "4" Model : assigns code
+    Partner "1" --> "4" Model : assigns_code
     Partner "1" --> "1..*" Task : provides
 
     Model "1" --> "1" AnimalCode : receives
     Model "4" --> "1..*" Task : executes
     Model "1" --> "1..*" Response : produces
 
-    Task "1" --> "0..*" Document : may require
+    Task "1" --> "0..*" Document : may_require
     Task "1" --> "4" Response : generates
