@@ -34,6 +34,8 @@ classDiagram
 
     class Response {
         +id
+        +taskId
+        +animalCode
         +content
     }
 
