@@ -34,3 +34,9 @@ Quatre modèles exécutent chaque tâche.
 Au total, **16 réponses** doivent être collectées et enregistrées.
 
 Les résultats seront utilisés dans l’exercice suivant pour évaluer et comparer la qualité des réponses.
+
+## Formulaire de l'exercice
+
+Capture d'écran du formulaire papier correspondant à l'Exercice 8 — Gathering Evidence.
+
+![Formulaire de l'Exercice 8](exercice8-formulaire.png)
