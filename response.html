@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Artificial Inquiries - Exercice 8</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f6fb;
+      color: #243247;
+    }
+    header {
+      background: #233b60;
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 10px; }
+    main { max-width: 1050px; margin: 30px auto; padding: 0 18px; }
+    section {
+      background: white;
+      padding: 24px;
+      margin-bottom: 24px;
+      border-radius: 12px;
+      box-shadow: 0 3px 14px #172d4810;
+    }
+    h2 { color: #233b60; }
+    label { display: block; font-weight: bold; margin-top: 15px; }
+    input, select, textarea {
+      width: 100%;
+      padding: 11px;
+      margin-top: 7px;
+      border: 1px solid #c9d2df;
+      border-radius: 7px;
+      font: inherit;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    button {
+      padding: 10px 15px;
+      border: 0;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: bold;
+      background: #294e80;
+      color: white;
+      margin: 5px 5px 5px 0;
+    }
+    button:hover { opacity: .85; }
+    .danger { background: #b43b47; }
+    .secondary { background: #68788b; }
+    .response {
+      border: 1px solid #e0e6ee;
+      padding: 16px;
+      border-radius: 9px;
+      margin: 12px 0;
+    }
+    .response h3 { margin: 0 0 8px; }
+    .response p { white-space: pre-wrap; }
+    .info { color: #657389; font-size: 14px; }
+    .status { font-weight: bold; color: #275e42; }
+    footer { text-align: center; padding: 25px; color: #68788b; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Artificial Inquiries</h1>
+  <p>Exercice 8 — Gathering Evidence</p>
+  <p>Interface de gestion des réponses des modèles d'IA</p>
+</header>
+
+<main>
+  <section>
+    <h2>Présentation</h2>
+    <p>
+      Cette interface permet de gérer les réponses produites
+      par les modèles d'intelligence artificielle dans
+      le cadre de l'exercice Gathering Evidence.
+    </p>
+    <p class="info">
+      Mode démonstration : les modifications sont enregistrées
+      dans ce navigateur, et non dans Omeka S.
+    </p>
+  </section>
+
+  <section>
+    <h2>Ajouter ou modifier une réponse</h2>
+
+    <form id="responseForm">
+      <input type="hidden" id="editId">
+
+      <label for="title">Titre de la réponse</label>
+      <input id="title" required placeholder="Exemple : Response 1">
+
+      <label for="model">Modèle d'IA</label>
+      <select id="model" required>
+        <option value="">Choisir un modèle</option>
+        <option value="Model 1">Model 1</option>
+        <option value="Model 2">Model 2</option>
+        <option value="Model 3">Model 3</option>
+        <option value="Model 4">Model 4</option>
+      </select>
+
+      <label for="animalCode">Code animal</label>
+      <select id="animalCode" required>
+        <option value="">Choisir un code</option>
+        <option value="giraffe">Giraffe</option>
+        <option value="sloth">Sloth</option>
+        <option value="dragon">Dragon</option>
+        <option value="turkey">Turkey</option>
+      </select>
+
+      <label for="taskId">Identifiant de la tâche</label>
+      <input id="taskId" value="task-1" required>
+
+      <label for="content">Contenu de la réponse</label>
+      <textarea id="content" required></textarea>
+
+      <div style="margin-top:18px">
+        <button type="submit" id="saveButton">Enregistrer</button>
+        <button type="button" class="secondary"
+                onclick="resetForm()">Annuler</button>
+      </div>
+    </form>
+    <p id="message" class="status" role="status"></p>
+  </section>
+
+  <section>
+    <h2>Liste des réponses</h2>
+    <input id="search" placeholder="Rechercher une réponse..."
+           oninput="renderResponses()">
+    <div id="responseList"></div>
+  </section>
+</main>
+
+<footer>
+  Master 2 Technologies de l'Hypermédia — Université Paris 8
+</footer>
+
+<script>
+  const STORAGE_KEY = "artinq_ex8_responses";
+
+  const initialResponses = [
+    {
+      id: "response-1", title: "Response 1",
+      model: "Model 1", animalCode: "giraffe",
+      taskId: "task-1",
+      content: "Réponse de test du modèle 1 pour la tâche Gathering Evidence."
+    },
+    {
+      id: "response-2", title: "Response 2",
+      model: "Model 2", animalCode: "sloth",
+      taskId: "task-1",
+      content: "Réponse de test du modèle 2 pour la tâche Gathering Evidence."
+    },
+    {
+      id: "response-3", title: "Response 3",
+      model: "Model 3", animalCode: "dragon",
+      taskId: "task-1",
+      content: "Réponse de test du modèle 3 pour la tâche Gathering Evidence."
+    },
+    {
+      id: "response-4", title: "Response 4",
+      model: "Model 4", animalCode: "turkey",
+      taskId: "task-1",
+      content: "Réponse de test du modèle 4 pour la tâche Gathering Evidence."
+    }
+  ];
+
+  let responses;
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    responses = Array.isArray(saved) ? saved : initialResponses;
+  } catch {
+    responses = initialResponses;
+  }
+
+  function saveData() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
+    renderResponses();
+  }
+
+  function showMessage(text) {
+    document.getElementById("message").textContent = text;
+  }
+
+  function resetForm() {
+    document.getElementById("responseForm").reset();
+    document.getElementById("editId").value = "";
+    document.getElementById("taskId").value = "task-1";
+    document.getElementById("saveButton").textContent = "Enregistrer";
+  }
+
+  function renderResponses() {
+    const list = document.getElementById("responseList");
+    const search = document.getElementById("search").value.toLowerCase();
+    list.replaceChildren();
+
+    const filtered = responses.filter(r =>
+      [r.title, r.model, r.animalCode, r.content]
+        .some(v => v.toLowerCase().includes(search))
+    );
+
+    if (filtered.length === 0) {
+      list.textContent = "Aucune réponse trouvée.";
+      return;
+    }
+
+    filtered.forEach(r => {
+      const card = document.createElement("article");
+      card.className = "response";
+
+      const heading = document.createElement("h3");
+      heading.textContent = r.title;
+
+      const info = document.createElement("p");
+      info.className = "info";
+      info.textContent =
+        `${r.model} | Code : ${r.animalCode} | Tâche : ${r.taskId}`;
+
+      const content = document.createElement("p");
+      content.textContent = r.content;
+
+      const edit = document.createElement("button");
+      edit.textContent = "Modifier";
+      edit.onclick = () => editResponse(r.id);
+
+      const remove = document.createElement("button");
+      remove.textContent = "Supprimer";
+      remove.className = "danger";
+      remove.onclick = () => deleteResponse(r.id);
+
+      card.append(heading, info, content, edit, remove);
+      list.appendChild(card);
+    });
+  }
+
+  document.getElementById("responseForm").onsubmit = function(event) {
+    event.preventDefault();
+
+    const editId = document.getElementById("editId").value;
+    const data = {
+      id: editId || "response-" + crypto.randomUUID(),
+      title: document.getElementById("title").value.trim(),
+      model: document.getElementById("model").value,
+      animalCode: document.getElementById("animalCode").value,
+      taskId: document.getElementById("taskId").value.trim(),
+      content: document.getElementById("content").value.trim()
+    };
+
+    if (!data.title || !data.content || !data.taskId) return;
+
+    if (editId) {
+      responses = responses.map(r => r.id === editId ? data : r);
+      showMessage("Réponse modifiée avec succès.");
+    } else {
+      responses.push(data);
+      showMessage("Réponse ajoutée avec succès.");
+    }
+
+    saveData();
+    resetForm();
+  };
+
+  function editResponse(id) {
+    const r = responses.find(item => item.id === id);
+    if (!r) return;
+
+    ["title", "model", "animalCode", "taskId", "content"]
+      .forEach(field => {
+        document.getElementById(field).value = r[field];
+      });
+
+    document.getElementById("editId").value = r.id;
+    document.getElementById("saveButton").textContent = "Modifier";
+    document.getElementById("responseForm")
+      .scrollIntoView({ behavior: "smooth" });
+  }
+
+  function deleteResponse(id) {
+    if (!confirm("Supprimer cette réponse ?")) return;
+    responses = responses.filter(r => r.id !== id);
+    saveData();
+    resetForm();
+    showMessage("Réponse supprimée.");
+  }
+
+  renderResponses();
+</script>
+</body>
+</html>
