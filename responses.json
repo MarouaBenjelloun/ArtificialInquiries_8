@@ -1,0 +1,34 @@
+[
+  {
+    "id": 13,
+    "title": "Response 1",
+    "identifier": "response-1",
+    "animalCode": "giraffe",
+    "taskId": "task-1",
+    "content": "Réponse de test du modèle 1 pour la tâche Gathering Evidence."
+  },
+  {
+    "id": 14,
+    "title": "Response 2",
+    "identifier": "response-2",
+    "animalCode": "sloth",
+    "taskId": "task-1",
+    "content": "Réponse de test du modèle 2 pour la tâche Gathering Evidence."
+  },
+  {
+    "id": 15,
+    "title": "Response 3",
+    "identifier": "response-3",
+    "animalCode": "dragon",
+    "taskId": "task-1",
+    "content": "Réponse de test du modèle 3 pour la tâche Gathering Evidence."
+  },
+  {
+    "id": 16,
+    "title": "Response 4",
+    "identifier": "response-4",
+    "animalCode": "turkey",
+    "taskId": "task-1",
+    "content": "Réponse de test du modèle 4 pour la tâche Gathering Evidence."
+  }
+]
