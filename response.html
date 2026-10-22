@@ -617,8 +617,13 @@
 <script>
 "use strict";
 
+const IS_GITHUB_PAGES =
+  window.location.hostname.endsWith(".github.io");
+
 const API = "/artificial-inquiries-api";
-const OMEKA_URL = "/omeka-s/api/items";
+const OMEKA_URL = IS_GITHUB_PAGES
+  ? "./responses.json"
+  : "/omeka-s/api/items";
 const RESPONSE_CLASS_ID = 112;
 
 const modelNames = {
@@ -734,16 +739,27 @@ async function checkAuthentication() {
 
 function mapItem(item) {
   const animalCode =
-    item["artinq:animalCode"]?.[0]?.["@value"] || "";
+    item.animalCode ||
+    item["artinq:animalCode"]?.[0]?.["@value"] ||
+    "";
 
   return {
-    id: Number(item["o:id"]),
-    title: item["o:title"] || "Sans titre",
-    identifier: item["artinq:id"]?.[0]?.["@value"] || "",
+    id: Number(item.id ?? item["o:id"]),
+    title: item.title || item["o:title"] || "Sans titre",
+    identifier:
+      item.identifier ||
+      item["artinq:id"]?.[0]?.["@value"] ||
+      "",
     model: modelNames[animalCode] || "Modèle inconnu",
     animalCode,
-    taskId: item["artinq:taskId"]?.[0]?.["@value"] || "",
-    content: item["artinq:content"]?.[0]?.["@value"] || ""
+    taskId:
+      item.taskId ||
+      item["artinq:taskId"]?.[0]?.["@value"] ||
+      "",
+    content:
+      item.content ||
+      item["artinq:content"]?.[0]?.["@value"] ||
+      ""
   };
 }
 
@@ -751,8 +767,9 @@ async function loadResponses() {
   $("responseList").textContent = "Chargement des réponses...";
 
   try {
-    const url =
-      `${OMEKA_URL}?resource_class_id=${RESPONSE_CLASS_ID}&per_page=100`;
+    const url = IS_GITHUB_PAGES
+  ? OMEKA_URL
+  : `${OMEKA_URL}?resource_class_id=${RESPONSE_CLASS_ID}&per_page=100`;
 
     const response = await fetch(url, {
       cache: "no-store"
@@ -1080,7 +1097,20 @@ $("animalCode").addEventListener("change", () => {
 });
 
 async function initialize() {
-  await checkAuthentication();
+  if (IS_GITHUB_PAGES) {
+    csrfToken = null;
+    isAdmin = false;
+
+    setConnection(
+      "Version publique de démonstration : consultation des réponses exportées depuis Omeka S."
+    );
+
+    $("accessStatus").textContent = "Lecture";
+    updateFormAvailability();
+  } else {
+    await checkAuthentication();
+  }
+
   await loadResponses();
 }
 
