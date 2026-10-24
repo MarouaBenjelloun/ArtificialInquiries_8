@@ -199,11 +199,13 @@ Pour utiliser l'interface locale :
 
 Le fonctionnement complet du CRUD nécessite également le backend PHP local et sa configuration privée.
 
+
 ## 12. Formulaire de l'exercice
 
-Une copie d'écran du formulaire papier correspondant à l'Exercice 08 — Gathering Evidence est disponible dans le dépôt GitHub.
+Une copie d'écran du formulaire papier correspondant à l'Exercice 08 — Gathering Evidence est disponible ci-dessous.
 
-[Consulter le formulaire de l'Exercice 08](https://github.com/MarouaBenjelloun/ArtificialInquiries_8/blob/main/exercice8-formulaire.png)
+![Formulaire de l'Exercice 8](exercice8-formulaire.png)
+
 
 ## 13. Fichiers principaux du dépôt
 
