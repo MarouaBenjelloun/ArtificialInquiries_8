@@ -16,7 +16,6 @@
       --border: #e1e7f0;
       --green: #18744d;
       --red: #b93f4d;
-      --shadow: 0 8px 30px rgba(22,43,70,.055);
     }
 
     * { box-sizing: border-box; }
@@ -66,7 +65,6 @@
       max-width: 660px;
       color: #d9e5f3;
       margin: 18px 0 0;
-      font-size: 16px;
     }
 
     .hero-label {
@@ -89,7 +87,7 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 28px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 8px 30px rgba(22,43,70,.055);
       margin-bottom: 25px;
     }
 
@@ -106,7 +104,6 @@
       margin: 0;
       color: var(--navy);
       font-size: 21px;
-      letter-spacing: -.4px;
     }
 
     .section-heading p {
@@ -139,15 +136,6 @@
       border-color: #f4cbd1;
     }
 
-    .status-dot {
-      flex-shrink: 0;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: currentColor;
-      margin-top: 7px;
-    }
-
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -167,7 +155,6 @@
       font-size: 29px;
       font-weight: 750;
       color: var(--navy);
-      line-height: 1.3;
     }
 
     .stat-label {
@@ -188,7 +175,6 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
       padding: 11px 17px;
       border: 1px solid transparent;
       border-radius: 9px;
@@ -197,18 +183,13 @@
       font-weight: 650;
       font-size: 13px;
       text-decoration: none;
-      transition: background .2s, transform .2s;
     }
 
-    .btn:hover {
-      filter: brightness(.94);
-      transform: translateY(-1px);
-    }
+    .btn:hover { filter: brightness(.94); }
 
     .btn:disabled {
       opacity: .5;
       cursor: not-allowed;
-      transform: none;
     }
 
     .btn-secondary {
@@ -250,7 +231,6 @@
       padding: 12px 14px;
       background: white;
       color: var(--text);
-      transition: border-color .2s, box-shadow .2s;
     }
 
     input:focus, select:focus, textarea:focus {
@@ -272,7 +252,7 @@
     .form-note {
       color: var(--muted);
       font-size: 13px;
-      margin: -8px 0 22px;
+      margin-bottom: 22px;
     }
 
     .search-row {
@@ -287,7 +267,6 @@
     .count-label {
       color: var(--muted);
       font-size: 13px;
-      white-space: nowrap;
     }
 
     .responses-grid {
@@ -301,7 +280,6 @@
       border-radius: 13px;
       padding: 23px;
       background: white;
-      transition: box-shadow .2s, border-color .2s;
       min-width: 0;
     }
 
@@ -312,7 +290,6 @@
 
     .card-top {
       display: flex;
-      align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
     }
@@ -360,15 +337,13 @@
       overflow-wrap: anywhere;
       font-size: 14px;
       color: #47566b;
-      line-height: 1.75;
-      margin: 0 0 18px;
+      margin-bottom: 18px;
     }
 
     .card-footer {
       padding-top: 15px;
       border-top: 1px solid var(--border);
       display: flex;
-      align-items: center;
       justify-content: space-between;
       gap: 10px;
       flex-wrap: wrap;
@@ -457,9 +432,8 @@
     <div id="connectionStatus"
          class="status-box"
          role="status">
-      <span class="status-dot"></span>
       <span id="connectionText">
-        Vérification de la connexion...
+        Chargement...
       </span>
     </div>
 
@@ -480,17 +454,7 @@
       </div>
     </div>
 
-    <div class="actions">
-      <a href="/artificial-inquiries-api/login.php"
-         class="btn btn-secondary">
-        Connexion administrateur
-      </a>
-
-      <a href="/artificial-inquiries-api/dashboard.php"
-         class="btn btn-secondary">
-        Espace administrateur
-      </a>
-    </div>
+    <div class="actions" id="authActions"></div>
   </section>
 
   <section class="panel" id="formSection">
@@ -498,16 +462,13 @@
       <div>
         <h2 id="formHeading">Ajouter une réponse</h2>
         <p>
-          Enregistrer une nouvelle réponse dans Omeka S
-          ou modifier une réponse autorisée.
+          Enregistrer une nouvelle réponse ou modifier
+          une réponse autorisée.
         </p>
       </div>
     </div>
 
-    <p class="form-note">
-      Une session administrateur est nécessaire pour enregistrer
-      des modifications.
-    </p>
+    <p class="form-note" id="formNote"></p>
 
     <form id="responseForm">
       <input type="hidden" id="editId">
@@ -585,8 +546,7 @@
       <div>
         <h2>Bibliothèque des réponses</h2>
         <p>
-          Consulter et rechercher les réponses enregistrées
-          dans Omeka S.
+          Consulter, rechercher et gérer les réponses.
         </p>
       </div>
     </div>
@@ -615,6 +575,9 @@
 <script>
 "use strict";
 
+// GitHub Pages utilise une démonstration dans le navigateur.
+// Le site local utilise l'API Omeka S et les fichiers PHP.
+
 const IS_GITHUB_PAGES =
   window.location.hostname.endsWith(".github.io");
 
@@ -625,6 +588,10 @@ const OMEKA_URL = IS_GITHUB_PAGES
   : "/omeka-s/api/items";
 
 const RESPONSE_CLASS_ID = 112;
+
+const DEMO_KEY = "artificial-inquiries-demo-responses-v1";
+
+const originalIds = new Set([13, 14, 15, 16]);
 
 const modelNames = {
   giraffe: "Model 1",
@@ -640,8 +607,6 @@ const animalForModel = {
   "Model 4": "turkey"
 };
 
-const originalIds = new Set([13, 14, 15, 16]);
-
 let responses = [];
 let csrfToken = null;
 let isAdmin = false;
@@ -650,59 +615,79 @@ let busy = false;
 const $ = id => document.getElementById(id);
 
 function setConnection(message, type = "") {
-  const box = $("connectionStatus");
-  box.className = "status-box" + (type ? " " + type : "");
+  $("connectionStatus").className =
+    "status-box" + (type ? " " + type : "");
+
   $("connectionText").textContent = message;
 }
 
 function showMessage(message, type = "") {
   const element = $("formMessage");
 
-  if (!message) {
-    element.className = "";
-    element.textContent = "";
-    return;
-  }
+  element.className = message
+    ? "status-box" + (type ? " " + type : "")
+    : "";
 
-  element.className = "status-box" + (type ? " " + type : "");
   element.textContent = message;
 }
 
 function isTemporary(response) {
-  return response.identifier.startsWith("response-test-")
-    && !originalIds.has(Number(response.id));
+  return (
+    typeof response.identifier === "string" &&
+    response.identifier.startsWith("response-test-") &&
+    !originalIds.has(Number(response.id))
+  );
 }
 
 function canEdit(response) {
-  return isAdmin && isTemporary(response);
+  return (IS_GITHUB_PAGES || isAdmin) && isTemporary(response);
 }
 
 function updateFormAvailability() {
-  $("saveButton").disabled = !isAdmin || busy;
+  $("saveButton").disabled =
+    busy || !(IS_GITHUB_PAGES || isAdmin);
 
   $("saveButton").textContent = $("editId").value
     ? "Enregistrer les modifications"
     : "Créer la réponse";
 }
 
-// Masquer les fonctionnalités administrateur
-// uniquement sur GitHub Pages.
-function configurePublicMode() {
-  if (!IS_GITHUB_PAGES) return;
+function configureAuthentication() {
+  const actions = $("authActions");
+  actions.replaceChildren();
 
-  const adminLinks = document.querySelectorAll(
-    'a[href*="artificial-inquiries-api/"]'
-  );
+  if (IS_GITHUB_PAGES) {
+    $("formNote").textContent =
+      "Mode démonstration : les modifications sont enregistrées " +
+      "uniquement dans ce navigateur, et non dans Omeka S. " +
+      "Les quatre réponses originales restent protégées.";
 
-  adminLinks.forEach(link => {
-    link.style.display = "none";
-  });
+    const note = document.createElement("span");
+    note.className = "protected";
+    note.textContent =
+      "Connexion administrateur disponible uniquement en local.";
 
-  const formSection = document.getElementById("formSection");
-
-  if (formSection) {
-    formSection.style.display = "none";
+    actions.appendChild(note);
+    return;
   }
+
+  $("formNote").textContent = isAdmin
+    ? "Session administrateur active. Les modifications autorisées " +
+      "sont enregistrées dans Omeka S."
+    : "Connectez-vous comme administrateur pour effectuer le CRUD.";
+
+  const link = document.createElement("a");
+  link.className = "btn btn-secondary";
+
+  if (isAdmin) {
+    link.href = API + "/logout.php";
+    link.textContent = "Se déconnecter";
+  } else {
+    link.href = API + "/login.php";
+    link.textContent = "Se connecter";
+  }
+
+  actions.appendChild(link);
 }
 
 function resetForm() {
@@ -726,20 +711,21 @@ async function checkAuthentication() {
     });
 
     if (!response.ok) {
-      throw new Error("Session administrateur absente.");
+      throw new Error("Session absente.");
     }
 
     const data = await response.json();
 
     if (data.status !== "ready" || !data.csrf_token) {
-      throw new Error("Jeton de sécurité indisponible.");
+      throw new Error("Session non autorisée.");
     }
 
     csrfToken = data.csrf_token;
     isAdmin = true;
 
     setConnection(
-      "Session administrateur active. Les opérations autorisées sont disponibles.",
+      "Session administrateur active. " +
+      "Les opérations autorisées sont disponibles.",
       "success"
     );
 
@@ -748,14 +734,14 @@ async function checkAuthentication() {
     isAdmin = false;
 
     setConnection(
-      "Mode consultation : connecte-toi comme administrateur pour gérer les réponses."
+      "Mode consultation : connectez-vous pour gérer les réponses."
     );
   }
 
   $("accessStatus").textContent = isAdmin ? "Admin" : "Lecture";
 
+  configureAuthentication();
   updateFormAvailability();
-  renderResponses();
 }
 
 function mapItem(item) {
@@ -788,8 +774,93 @@ function mapItem(item) {
   };
 }
 
+// Réponses de démonstration stockées uniquement
+// dans le navigateur de l'utilisateur.
+
+function readDemoResponses() {
+  try {
+    const data = JSON.parse(
+      localStorage.getItem(DEMO_KEY) || "[]"
+    );
+
+    if (!Array.isArray(data)) return [];
+
+    return data.filter(r =>
+      r &&
+      Number.isSafeInteger(r.id) &&
+      r.id >= 1000000 &&
+      typeof r.title === "string" &&
+      typeof r.content === "string" &&
+      typeof r.identifier === "string" &&
+      r.identifier.startsWith("response-test-") &&
+      typeof r.animalCode === "string" &&
+      typeof r.taskId === "string"
+    );
+
+  } catch (error) {
+    return [];
+  }
+}
+
+function demoMutation(endpoint, payload) {
+  const saved = readDemoResponses();
+
+  if (endpoint === "create-response.php") {
+    const id =
+      Math.max(999999, ...saved.map(r => r.id)) + 1;
+
+    const entry = {
+      id,
+      title: payload.title,
+      content: payload.content,
+      animalCode: payload.animalCode,
+      taskId: payload.taskId,
+      model: modelNames[payload.animalCode] || "Modèle inconnu",
+      identifier: "response-test-" + id
+    };
+
+    saved.push(entry);
+
+    localStorage.setItem(
+      DEMO_KEY,
+      JSON.stringify(saved)
+    );
+
+    return { id };
+  }
+
+  const index = saved.findIndex(
+    r => r.id === Number(payload.id)
+  );
+
+  if (index === -1) {
+    throw new Error(
+      "Réponse de démonstration introuvable."
+    );
+  }
+
+  if (endpoint === "update-response.php") {
+    saved[index].title = payload.title;
+    saved[index].content = payload.content;
+
+  } else if (endpoint === "delete-response.php") {
+    saved.splice(index, 1);
+
+  } else {
+    throw new Error("Opération inconnue.");
+  }
+
+  localStorage.setItem(
+    DEMO_KEY,
+    JSON.stringify(saved)
+  );
+
+  return { id: Number(payload.id) };
+}
+
 async function loadResponses() {
-  $("responseList").textContent = "Chargement des réponses...";
+  $("responseList").textContent =
+    "Chargement des réponses...";
 
   try {
     const url = IS_GITHUB_PAGES
@@ -812,6 +883,12 @@ async function loadResponses() {
 
     responses = items.map(mapItem);
 
+    if (IS_GITHUB_PAGES) {
+      responses = responses.concat(
+        readDemoResponses()
+      );
+    }
+
     $("totalCount").textContent = responses.length;
 
     $("modelCount").textContent =
@@ -826,14 +903,20 @@ async function loadResponses() {
     $("modelCount").textContent = "—";
 
     $("responseList").textContent =
-      "Impossible de récupérer les réponses : " + error.message;
+      "Impossible de récupérer les réponses : " +
+      error.message;
   }
 }
 
 function makeBadge(text, neutral = false) {
   const badge = document.createElement("span");
-  badge.className = neutral ? "badge badge-neutral" : "badge";
+
+  badge.className = neutral
+    ? "badge badge-neutral"
+    : "badge";
+
   badge.textContent = text;
+
   return badge;
 }
 
@@ -943,11 +1026,12 @@ function editResponse(id) {
   $("taskId").value = r.taskId;
   $("content").value = r.content;
 
-  ["model", "animalCode", "taskId"].forEach(id => {
-    $(id).disabled = true;
+  ["model", "animalCode", "taskId"].forEach(fieldId => {
+    $(fieldId).disabled = true;
   });
 
-  $("formHeading").textContent = "Modifier la réponse #" + id;
+  $("formHeading").textContent =
+    "Modifier la réponse #" + id;
 
   updateFormAvailability();
 
@@ -958,8 +1042,14 @@ function editResponse(id) {
 }
 
 async function sendMutation(endpoint, payload) {
+  if (IS_GITHUB_PAGES) {
+    return demoMutation(endpoint, payload);
+  }
+
   if (!isAdmin || !csrfToken) {
-    throw new Error("Connexion administrateur requise.");
+    throw new Error(
+      "Connexion administrateur requise."
+    );
   }
 
   const response = await fetch(API + "/" + endpoint, {
@@ -975,7 +1065,9 @@ async function sendMutation(endpoint, payload) {
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(result.message || "Opération refusée.");
+    throw new Error(
+      result.message || "Opération refusée."
+    );
   }
 
   return result;
@@ -1004,7 +1096,10 @@ async function saveResponse(event) {
     );
 
     if (!existing || !canEdit(existing)) {
-      showMessage("Modification non autorisée.", "error");
+      showMessage(
+        "Modification non autorisée.",
+        "error"
+      );
       return;
     }
   }
@@ -1016,11 +1111,14 @@ async function saveResponse(event) {
     let result;
 
     if (id) {
-      result = await sendMutation("update-response.php", {
-        id: Number(id),
-        title,
-        content
-      });
+      result = await sendMutation(
+        "update-response.php",
+        {
+          id: Number(id),
+          title,
+          content
+        }
+      );
 
     } else {
       const animalCode = $("animalCode").value;
@@ -1043,19 +1141,26 @@ async function saveResponse(event) {
         );
       }
 
-      result = await sendMutation("create-response.php", {
-        title,
-        content,
-        animalCode,
-        taskId
-      });
+      result = await sendMutation(
+        "create-response.php",
+        {
+          title,
+          content,
+          animalCode,
+          taskId
+        }
+      );
     }
 
     resetForm();
     await loadResponses();
 
     showMessage(
-      "Opération réussie : réponse #" + result.id + ".",
+      "Opération réussie " +
+      (IS_GITHUB_PAGES
+        ? "(démonstration dans ce navigateur)"
+        : "(Omeka S)") +
+      " : réponse #" + result.id + ".",
       "success"
     );
 
@@ -1072,20 +1177,24 @@ async function deleteResponse(id) {
   const r = responses.find(item => item.id === id);
 
   if (!r || !canEdit(r)) {
-    showMessage("Suppression non autorisée.", "error");
+    showMessage(
+      "Suppression non autorisée.",
+      "error"
+    );
     return;
   }
 
   if (!confirm(
-    `Supprimer définitivement la réponse "${r.title}" (ID ${id}) ?`
+    `Supprimer la réponse "${r.title}" (ID ${id}) ?`
   )) {
     return;
   }
 
   try {
-    const result = await sendMutation("delete-response.php", {
-      id
-    });
+    const result = await sendMutation(
+      "delete-response.php",
+      { id }
+    );
 
     if (Number($("editId").value) === id) {
       resetForm();
@@ -1094,7 +1203,10 @@ async function deleteResponse(id) {
     await loadResponses();
 
     showMessage(
-      "Réponse #" + result.id + " supprimée avec succès.",
+      "Réponse #" + result.id + " supprimée " +
+      (IS_GITHUB_PAGES
+        ? "de cette démonstration."
+        : "dans Omeka S."),
       "success"
     );
 
@@ -1103,13 +1215,25 @@ async function deleteResponse(id) {
   }
 }
 
-$("responseForm").addEventListener("submit", saveResponse);
+$("responseForm").addEventListener(
+  "submit",
+  saveResponse
+);
 
-$("cancelButton").addEventListener("click", resetForm);
+$("cancelButton").addEventListener(
+  "click",
+  resetForm
+);
 
-$("refreshButton").addEventListener("click", loadResponses);
+$("refreshButton").addEventListener(
+  "click",
+  loadResponses
+);
 
-$("search").addEventListener("input", renderResponses);
+$("search").addEventListener(
+  "input",
+  renderResponses
+);
 
 $("model").addEventListener("change", () => {
   $("animalCode").value =
@@ -1122,18 +1246,19 @@ $("animalCode").addEventListener("change", () => {
 });
 
 async function initialize() {
-  // Appliquer le mode public avant de charger les réponses.
-  configurePublicMode();
-
   if (IS_GITHUB_PAGES) {
     csrfToken = null;
     isAdmin = false;
 
     setConnection(
-      "Version publique de démonstration : consultation des réponses exportées depuis Omeka S."
+      "Version publique : démonstration interactive du CRUD. " +
+      "Les modifications sont enregistrées uniquement " +
+      "dans ce navigateur."
     );
 
-    $("accessStatus").textContent = "Lecture";
+    $("accessStatus").textContent = "Démo";
+
+    configureAuthentication();
     updateFormAvailability();
 
   } else {
