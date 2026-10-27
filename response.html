@@ -2,394 +2,339 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Artificial Inquiries — Gathering Evidence</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artificial Inquiries — Gathering Evidence</title>
 
-  <style>
-    :root {
-      --navy: #14243d;
-      --blue: #3566a0;
-      --background: #f5f7fb;
-      --text: #26354a;
-      --muted: #6c7b90;
-      --border: #e1e7f0;
-      --green: #18744d;
-      --red: #b93f4d;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: var(--background);
-      color: var(--text);
-      line-height: 1.6;
-    }
-
-    button, input, select, textarea { font: inherit; }
-    button { cursor: pointer; }
-
-    .container {
-      max-width: 1180px;
-      margin: auto;
-      padding: 0 24px;
-    }
-
-    .hero {
-      background: linear-gradient(125deg, #14243d, #284d79);
-      color: white;
-      padding: 57px 0 65px;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      color: #c4d7f0;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-    }
-
-    .hero h1 {
-      margin: 0;
-      font-size: clamp(32px, 5vw, 49px);
-      letter-spacing: -1.5px;
-      line-height: 1.15;
-    }
-
-    .hero p {
-      max-width: 660px;
-      color: #d9e5f3;
-      margin: 18px 0 0;
-    }
-
-    .hero-label {
-      display: inline-block;
-      margin-top: 22px;
-      padding: 7px 13px;
-      background: rgba(255,255,255,.12);
-      border: 1px solid rgba(255,255,255,.2);
-      border-radius: 30px;
-      font-size: 12px;
-    }
-
-    main {
-      padding-top: 34px !important;
-      padding-bottom: 55px !important;
-    }
-
-    .panel {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 8px 30px rgba(22,43,70,.055);
-      margin-bottom: 25px;
-    }
-
-    .section-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-bottom: 22px;
-    }
-
-    .section-heading h2 {
-      margin: 0;
-      color: var(--navy);
-      font-size: 21px;
-    }
-
-    .section-heading p {
-      margin: 5px 0 0;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .status-box {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      background: #edf4fc;
-      color: #254d7c;
-      border: 1px solid #d8e7f7;
-      padding: 15px 18px;
-      border-radius: 10px;
-      font-size: 14px;
-    }
-
-    .status-box.success {
-      background: #e8f7ef;
-      color: var(--green);
-      border-color: #c8e9d6;
-    }
-
-    .status-box.error {
-      background: #fcecef;
-      color: var(--red);
-      border-color: #f4cbd1;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin: 22px 0;
-    }
-
-    .stat {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 19px;
-      background: #fbfcfe;
-    }
-
-    .stat-number {
-      display: block;
-      font-size: 29px;
-      font-weight: 750;
-      color: var(--navy);
-    }
-
-    .stat-label {
-      display: block;
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 5px;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 11px 17px;
-      border: 1px solid transparent;
-      border-radius: 9px;
-      background: var(--blue);
-      color: white;
-      font-weight: 650;
-      font-size: 13px;
-      text-decoration: none;
-    }
-
-    .btn:hover { filter: brightness(.94); }
-
-    .btn:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    .btn-secondary {
-      background: #edf2f8;
-      color: #203a5e;
-      border-color: #e0e7f0;
-    }
-
-    .btn-danger {
-      background: var(--red);
-      color: white;
-    }
-
-    .btn-small {
-      padding: 8px 13px;
-      font-size: 12px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0 20px;
-    }
-
-    .field { margin-bottom: 19px; }
-
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 650;
-      color: #33455d;
-      margin-bottom: 7px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      border: 1px solid #cfd9e6;
-      border-radius: 9px;
-      padding: 12px 14px;
-      background: white;
-      color: var(--text);
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(53,102,160,.12);
-    }
-
-    input:disabled, select:disabled {
-      background: #edf1f6;
-      color: #758298;
-    }
-
-    textarea {
-      min-height: 155px;
-      resize: vertical;
-    }
-
-    .form-note {
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 22px;
-    }
-
-    .search-row {
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      margin-bottom: 23px;
-    }
-
-    .search-row input { flex: 1; }
-
-    .count-label {
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .responses-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .response-card {
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      padding: 23px;
-      background: white;
-      min-width: 0;
-    }
-
-    .response-card:hover {
-      border-color: #c3d4e9;
-      box-shadow: 0 7px 24px rgba(23,43,73,.07);
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .response-card h3 {
-      font-size: 17px;
-      margin: 0 0 13px;
-      color: var(--navy);
-      overflow-wrap: anywhere;
-    }
-
-    .id-badge {
-      background: #f0f3f8;
-      color: #64748b;
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 11px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-bottom: 16px;
-    }
-
-    .badge {
-      background: #eaf1fa;
-      color: #315c8e;
-      border-radius: 6px;
-      padding: 5px 9px;
-      font-size: 11px;
-      font-weight: 650;
-    }
-
-    .badge-neutral {
-      background: #f0f3f7;
-      color: #68778b;
-    }
-
-    .card-content {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      font-size: 14px;
-      color: #47566b;
-      margin-bottom: 18px;
-    }
-
-    .card-footer {
-      padding-top: 15px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .protected {
-      font-size: 12px;
-      color: #78869a;
-    }
-
-    .empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 45px 20px;
-      color: var(--muted);
-      border: 1px dashed var(--border);
-      border-radius: 12px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 30px 20px;
-      color: var(--muted);
-      font-size: 13px;
-      border-top: 1px solid var(--border);
-    }
-
-    @media (max-width: 760px) {
-      .stats, .responses-grid, .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .panel { padding: 20px; }
-      .hero { padding: 40px 0 45px; }
-
-      .search-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .container {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-    }
-  </style>
+<style>
+:root {
+  --navy:#14243d;
+  --blue:#3566a0;
+  --background:#f5f7fb;
+  --text:#26354a;
+  --muted:#6c7b90;
+  --border:#e1e7f0;
+  --green:#18744d;
+  --red:#b93f4d;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:var(--background);
+  color:var(--text);
+  line-height:1.6;
+}
+button,input,select,textarea { font:inherit; }
+button { cursor:pointer; }
+.container {
+  max-width:1180px;
+  margin:auto;
+  padding:0 24px;
+}
+.hero {
+  background:linear-gradient(125deg,#14243d,#284d79);
+  color:white;
+  padding:57px 0 65px;
+}
+.eyebrow {
+  display:inline-block;
+  color:#c4d7f0;
+  font-size:12px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom:12px;
+}
+.hero h1 {
+  margin:0;
+  font-size:clamp(32px,5vw,49px);
+  letter-spacing:-1.5px;
+  line-height:1.15;
+}
+.hero p {
+  max-width:660px;
+  color:#d9e5f3;
+  margin:18px 0 0;
+}
+.hero-label {
+  display:inline-block;
+  margin-top:22px;
+  padding:7px 13px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:30px;
+  font-size:12px;
+}
+main {
+  padding-top:34px!important;
+  padding-bottom:55px!important;
+}
+.panel {
+  background:white;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:28px;
+  box-shadow:0 8px 30px rgba(22,43,70,.055);
+  margin-bottom:25px;
+}
+.section-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:15px;
+  margin-bottom:22px;
+}
+.section-heading h2 {
+  margin:0;
+  color:var(--navy);
+  font-size:21px;
+}
+.section-heading p {
+  margin:5px 0 0;
+  font-size:13px;
+  color:var(--muted);
+}
+.status-box {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:#edf4fc;
+  color:#254d7c;
+  border:1px solid #d8e7f7;
+  padding:15px 18px;
+  border-radius:10px;
+  font-size:14px;
+}
+.status-box.success {
+  background:#e8f7ef;
+  color:var(--green);
+  border-color:#c8e9d6;
+}
+.status-box.error {
+  background:#fcecef;
+  color:var(--red);
+  border-color:#f4cbd1;
+}
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin:22px 0;
+}
+.stat {
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:19px;
+  background:#fbfcfe;
+}
+.stat-number {
+  display:block;
+  font-size:29px;
+  font-weight:750;
+  color:var(--navy);
+}
+.stat-label {
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-top:5px;
+}
+.actions {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+}
+.btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:11px 17px;
+  border:1px solid transparent;
+  border-radius:9px;
+  background:var(--blue);
+  color:white;
+  font-weight:650;
+  font-size:13px;
+  text-decoration:none;
+}
+.btn:hover:not(:disabled) {
+  filter:brightness(.94);
+}
+.btn:disabled {
+  opacity:.45;
+  cursor:not-allowed;
+}
+.btn-secondary {
+  background:#edf2f8;
+  color:#203a5e;
+  border-color:#e0e7f0;
+}
+.btn-danger {
+  background:var(--red);
+  color:white;
+}
+.btn-small {
+  padding:8px 13px;
+  font-size:12px;
+}
+.form-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 20px;
+}
+.field { margin-bottom:19px; }
+label {
+  display:block;
+  font-size:13px;
+  font-weight:650;
+  color:#33455d;
+  margin-bottom:7px;
+}
+input,select,textarea {
+  width:100%;
+  border:1px solid #cfd9e6;
+  border-radius:9px;
+  padding:12px 14px;
+  background:white;
+  color:var(--text);
+}
+input:focus,select:focus,textarea:focus {
+  outline:none;
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(53,102,160,.12);
+}
+input:disabled,select:disabled {
+  background:#edf1f6;
+  color:#758298;
+}
+textarea {
+  min-height:155px;
+  resize:vertical;
+}
+.form-note {
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:22px;
+}
+.search-row {
+  display:flex;
+  gap:14px;
+  align-items:center;
+  margin-bottom:23px;
+}
+.search-row input { flex:1; }
+.count-label {
+  color:var(--muted);
+  font-size:13px;
+}
+.responses-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+}
+.response-card {
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:23px;
+  background:white;
+  min-width:0;
+}
+.response-card:hover {
+  border-color:#c3d4e9;
+  box-shadow:0 7px 24px rgba(23,43,73,.07);
+}
+.card-top {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+}
+.response-card h3 {
+  font-size:17px;
+  margin:0 0 13px;
+  color:var(--navy);
+  overflow-wrap:anywhere;
+}
+.id-badge {
+  background:#f0f3f8;
+  color:#64748b;
+  border-radius:6px;
+  padding:4px 8px;
+  font-size:11px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.badges {
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:16px;
+}
+.badge {
+  background:#eaf1fa;
+  color:#315c8e;
+  border-radius:6px;
+  padding:5px 9px;
+  font-size:11px;
+  font-weight:650;
+}
+.badge-neutral {
+  background:#f0f3f7;
+  color:#68778b;
+}
+.card-content {
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  font-size:14px;
+  color:#47566b;
+  margin-bottom:18px;
+}
+.card-footer {
+  padding-top:15px;
+  border-top:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:10px;
+}
+.protected {
+  font-size:12px;
+  color:#78869a;
+}
+.empty {
+  grid-column:1/-1;
+  text-align:center;
+  padding:45px 20px;
+  color:var(--muted);
+  border:1px dashed var(--border);
+  border-radius:12px;
+}
+footer {
+  text-align:center;
+  padding:30px 20px;
+  color:var(--muted);
+  font-size:13px;
+  border-top:1px solid var(--border);
+}
+@media(max-width:760px) {
+  .stats,.responses-grid,.form-grid {
+    grid-template-columns:1fr;
+  }
+  .panel { padding:20px; }
+  .hero { padding:40px 0 45px; }
+  .search-row {
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .container {
+    padding-left:16px;
+    padding-right:16px;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -399,14 +344,11 @@
     <span class="eyebrow">
       Exercice 08 · Intelligence artificielle
     </span>
-
     <h1>Gathering Evidence</h1>
-
     <p>
       Interface de gestion et d'exploration des réponses produites
       par les modèles d'intelligence artificielle.
     </p>
-
     <span class="hero-label">
       Projet Artificial Inquiries · Omeka S
     </span>
@@ -415,156 +357,124 @@
 
 <main class="container">
 
-  <section class="panel">
-    <div class="section-heading">
-      <div>
-        <h2>Vue d'ensemble</h2>
-        <p>État de la connexion et données de l'exercice.</p>
+<section class="panel">
+  <div class="section-heading">
+    <div>
+      <h2>Vue d'ensemble</h2>
+      <p>État de la connexion et données de l'exercice.</p>
+    </div>
+    <button id="refreshButton" class="btn btn-secondary" type="button">
+      ↻ Actualiser
+    </button>
+  </div>
+
+  <div id="connectionStatus" class="status-box" role="status">
+    <span id="connectionText">Chargement...</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <span id="totalCount" class="stat-number">—</span>
+      <span class="stat-label">Réponses affichées</span>
+    </div>
+    <div class="stat">
+      <span id="modelCount" class="stat-number">—</span>
+      <span class="stat-label">Modèles représentés</span>
+    </div>
+    <div class="stat">
+      <span id="accessStatus" class="stat-number">—</span>
+      <span class="stat-label">Mode d'accès</span>
+    </div>
+  </div>
+
+  <div class="actions" id="authActions"></div>
+</section>
+
+<section class="panel" id="formSection">
+  <div class="section-heading">
+    <div>
+      <h2 id="formHeading">Ajouter une réponse</h2>
+      <p>Créer ou modifier une réponse de test.</p>
+    </div>
+  </div>
+
+  <p class="form-note" id="formNote"></p>
+
+  <form id="responseForm">
+    <input type="hidden" id="editId">
+
+    <div class="field">
+      <label for="title">Titre de la réponse</label>
+      <input id="title" maxlength="200" required
+             placeholder="Exemple : Response Test Interface">
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label for="model">Modèle d'IA</label>
+        <select id="model" required>
+          <option value="">Sélectionner un modèle</option>
+          <option value="Model 1">Model 1</option>
+          <option value="Model 2">Model 2</option>
+          <option value="Model 3">Model 3</option>
+          <option value="Model 4">Model 4</option>
+        </select>
       </div>
 
-      <button id="refreshButton"
-              type="button"
-              class="btn btn-secondary">
-        ↻ Actualiser
+      <div class="field">
+        <label for="animalCode">Code animal</label>
+        <select id="animalCode" required>
+          <option value="">Sélectionner un code</option>
+          <option value="giraffe">Giraffe</option>
+          <option value="sloth">Sloth</option>
+          <option value="dragon">Dragon</option>
+          <option value="turkey">Turkey</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="taskId">Identifiant de la tâche</label>
+      <input id="taskId" value="task-1" required>
+    </div>
+
+    <div class="field">
+      <label for="content">Contenu de la réponse</label>
+      <textarea id="content" required
+        placeholder="Saisir le contenu de la réponse..."></textarea>
+    </div>
+
+    <div class="actions">
+      <button type="submit" id="saveButton" class="btn">
+        Créer la réponse
+      </button>
+      <button type="button" id="cancelButton" class="btn btn-secondary">
+        Annuler
       </button>
     </div>
+  </form>
 
-    <div id="connectionStatus"
-         class="status-box"
-         role="status">
-      <span id="connectionText">
-        Chargement...
-      </span>
+  <div id="formMessage" role="status" aria-live="polite"
+       style="margin-top:18px"></div>
+</section>
+
+<section class="panel">
+  <div class="section-heading">
+    <div>
+      <h2>Bibliothèque des réponses</h2>
+      <p>Consulter, rechercher et gérer les réponses.</p>
     </div>
+  </div>
 
-    <div class="stats">
-      <div class="stat">
-        <span id="totalCount" class="stat-number">—</span>
-        <span class="stat-label">Réponses enregistrées</span>
-      </div>
+  <div class="search-row">
+    <input id="search" type="search"
+           aria-label="Rechercher une réponse"
+           placeholder="Rechercher par titre, modèle, code ou contenu...">
+    <span id="visibleCount" class="count-label"></span>
+  </div>
 
-      <div class="stat">
-        <span id="modelCount" class="stat-number">—</span>
-        <span class="stat-label">Modèles représentés</span>
-      </div>
-
-      <div class="stat">
-        <span id="accessStatus" class="stat-number">—</span>
-        <span class="stat-label">Mode d'accès</span>
-      </div>
-    </div>
-
-    <div class="actions" id="authActions"></div>
-  </section>
-
-  <section class="panel" id="formSection">
-    <div class="section-heading">
-      <div>
-        <h2 id="formHeading">Ajouter une réponse</h2>
-        <p>
-          Enregistrer une nouvelle réponse ou modifier
-          une réponse autorisée.
-        </p>
-      </div>
-    </div>
-
-    <p class="form-note" id="formNote"></p>
-
-    <form id="responseForm">
-      <input type="hidden" id="editId">
-
-      <div class="field">
-        <label for="title">Titre de la réponse</label>
-        <input
-          id="title"
-          maxlength="200"
-          required
-          placeholder="Exemple : Response Test Interface">
-      </div>
-
-      <div class="form-grid">
-        <div class="field">
-          <label for="model">Modèle d'IA</label>
-          <select id="model" required>
-            <option value="">Sélectionner un modèle</option>
-            <option value="Model 1">Model 1</option>
-            <option value="Model 2">Model 2</option>
-            <option value="Model 3">Model 3</option>
-            <option value="Model 4">Model 4</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="animalCode">Code animal</label>
-          <select id="animalCode" required>
-            <option value="">Sélectionner un code</option>
-            <option value="giraffe">Giraffe</option>
-            <option value="sloth">Sloth</option>
-            <option value="dragon">Dragon</option>
-            <option value="turkey">Turkey</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="taskId">Identifiant de la tâche</label>
-        <input id="taskId" value="task-1" required>
-      </div>
-
-      <div class="field">
-        <label for="content">Contenu de la réponse</label>
-        <textarea
-          id="content"
-          required
-          placeholder="Saisir le contenu de la réponse..."></textarea>
-      </div>
-
-      <div class="actions">
-        <button type="submit"
-                id="saveButton"
-                class="btn"
-                disabled>
-          Créer la réponse
-        </button>
-
-        <button type="button"
-                id="cancelButton"
-                class="btn btn-secondary">
-          Annuler
-        </button>
-      </div>
-    </form>
-
-    <div id="formMessage"
-         role="status"
-         aria-live="polite"
-         style="margin-top:18px"></div>
-  </section>
-
-  <section class="panel">
-    <div class="section-heading">
-      <div>
-        <h2>Bibliothèque des réponses</h2>
-        <p>
-          Consulter, rechercher et gérer les réponses.
-        </p>
-      </div>
-    </div>
-
-    <div class="search-row">
-      <input
-        id="search"
-        type="search"
-        aria-label="Rechercher une réponse"
-        placeholder="Rechercher par titre, modèle, code ou contenu...">
-
-      <span id="visibleCount" class="count-label"></span>
-    </div>
-
-    <div id="responseList"
-         class="responses-grid"
-         aria-live="polite"></div>
-  </section>
+  <div id="responseList" class="responses-grid" aria-live="polite"></div>
+</section>
 
 </main>
 
@@ -574,9 +484,6 @@
 
 <script>
 "use strict";
-
-// GitHub Pages utilise une démonstration dans le navigateur.
-// Le site local utilise l'API Omeka S et les fichiers PHP.
 
 const IS_GITHUB_PAGES =
   window.location.hostname.endsWith(".github.io");
@@ -588,23 +495,23 @@ const OMEKA_URL = IS_GITHUB_PAGES
   : "/omeka-s/api/items";
 
 const RESPONSE_CLASS_ID = 112;
-
 const DEMO_KEY = "artificial-inquiries-demo-responses-v1";
+const DEMO_SESSION_KEY = "artificial-inquiries-demo-session-v1";
 
-const originalIds = new Set([13, 14, 15, 16]);
+const originalIds = new Set([13,14,15,16]);
 
 const modelNames = {
-  giraffe: "Model 1",
-  sloth: "Model 2",
-  dragon: "Model 3",
-  turkey: "Model 4"
+  giraffe:"Model 1",
+  sloth:"Model 2",
+  dragon:"Model 3",
+  turkey:"Model 4"
 };
 
 const animalForModel = {
-  "Model 1": "giraffe",
-  "Model 2": "sloth",
-  "Model 3": "dragon",
-  "Model 4": "turkey"
+  "Model 1":"giraffe",
+  "Model 2":"sloth",
+  "Model 3":"dragon",
+  "Model 4":"turkey"
 };
 
 let responses = [];
@@ -614,33 +521,26 @@ let busy = false;
 
 const $ = id => document.getElementById(id);
 
-function setConnection(message, type = "") {
+function setConnection(message,type="") {
   $("connectionStatus").className =
     "status-box" + (type ? " " + type : "");
-
   $("connectionText").textContent = message;
 }
 
-function showMessage(message, type = "") {
-  const element = $("formMessage");
-
-  element.className = message
-    ? "status-box" + (type ? " " + type : "")
-    : "";
-
-  element.textContent = message;
+function showMessage(message,type="") {
+  $("formMessage").className =
+    message ? "status-box" + (type ? " " + type : "") : "";
+  $("formMessage").textContent = message;
 }
 
-function isTemporary(response) {
-  return (
-    typeof response.identifier === "string" &&
-    response.identifier.startsWith("response-test-") &&
-    !originalIds.has(Number(response.id))
-  );
+function isTemporary(r) {
+  return typeof r.identifier === "string"
+    && r.identifier.startsWith("response-test-")
+    && !originalIds.has(Number(r.id));
 }
 
-function canEdit(response) {
-  return (IS_GITHUB_PAGES || isAdmin) && isTemporary(response);
+function canEdit(r) {
+  return (IS_GITHUB_PAGES || isAdmin) && isTemporary(r);
 }
 
 function updateFormAvailability() {
@@ -652,22 +552,36 @@ function updateFormAvailability() {
     : "Créer la réponse";
 }
 
+function addAuthButton(text,callback,danger=false) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className =
+    "btn " + (danger ? "btn-danger" : "btn-secondary");
+  button.textContent = text;
+  button.addEventListener("click",callback);
+  $("authActions").appendChild(button);
+}
+
 function configureAuthentication() {
-  const actions = $("authActions");
-  actions.replaceChildren();
+  $("authActions").replaceChildren();
 
   if (IS_GITHUB_PAGES) {
     $("formNote").textContent =
-      "Mode démonstration : les modifications sont enregistrées " +
-      "uniquement dans ce navigateur, et non dans Omeka S. " +
-      "Les quatre réponses originales restent protégées.";
+      "Mode démonstration : les réponses créées, modifiées ou " +
+      "supprimées sont enregistrées uniquement dans ce navigateur. " +
+      "Les réponses originales d'Omeka S sont protégées.";
 
-    const note = document.createElement("span");
-    note.className = "protected";
-    note.textContent =
-      "Connexion administrateur disponible uniquement en local.";
+    addAuthButton("Connexion administrateur (démo)",() => {
+      sessionStorage.setItem(DEMO_SESSION_KEY,"active");
+      updateDemoSession();
+    });
 
-    actions.appendChild(note);
+    addAuthButton("Se déconnecter (démo)",() => {
+      sessionStorage.removeItem(DEMO_SESSION_KEY);
+      updateDemoSession();
+      resetForm();
+    },true);
+
     return;
   }
 
@@ -678,16 +592,27 @@ function configureAuthentication() {
 
   const link = document.createElement("a");
   link.className = "btn btn-secondary";
+  link.href = API + (isAdmin ? "/logout.php" : "/login.php");
+  link.textContent = isAdmin
+    ? "Se déconnecter"
+    : "Connexion administrateur";
+  $("authActions").appendChild(link);
+}
 
-  if (isAdmin) {
-    link.href = API + "/logout.php";
-    link.textContent = "Se déconnecter";
-  } else {
-    link.href = API + "/login.php";
-    link.textContent = "Se connecter";
-  }
+function updateDemoSession() {
+  const active =
+    sessionStorage.getItem(DEMO_SESSION_KEY) === "active";
 
-  actions.appendChild(link);
+  $("accessStatus").textContent =
+    active ? "Démo admin" : "Démo";
+
+  setConnection(
+    active
+      ? "Session de démonstration active. CRUD de test disponible."
+      : "Version publique : CRUD de démonstration disponible. " +
+        "Les modifications restent dans ce navigateur.",
+    active ? "success" : ""
+  );
 }
 
 function resetForm() {
@@ -696,7 +621,7 @@ function resetForm() {
   $("taskId").value = "task-1";
   $("formHeading").textContent = "Ajouter une réponse";
 
-  ["model", "animalCode", "taskId"].forEach(id => {
+  ["model","animalCode","taskId"].forEach(id => {
     $(id).disabled = false;
   });
 
@@ -705,14 +630,12 @@ function resetForm() {
 
 async function checkAuthentication() {
   try {
-    const response = await fetch(API + "/csrf.php", {
-      credentials: "same-origin",
-      cache: "no-store"
+    const response = await fetch(API + "/csrf.php",{
+      credentials:"same-origin",
+      cache:"no-store"
     });
 
-    if (!response.ok) {
-      throw new Error("Session absente.");
-    }
+    if (!response.ok) throw new Error("Session absente.");
 
     const data = await response.json();
 
@@ -728,8 +651,7 @@ async function checkAuthentication() {
       "Les opérations autorisées sont disponibles.",
       "success"
     );
-
-  } catch (error) {
+  } catch(error) {
     csrfToken = null;
     isAdmin = false;
 
@@ -739,7 +661,6 @@ async function checkAuthentication() {
   }
 
   $("accessStatus").textContent = isAdmin ? "Admin" : "Lecture";
-
   configureAuthentication();
   updateFormAvailability();
 }
@@ -751,31 +672,21 @@ function mapItem(item) {
     "";
 
   return {
-    id: Number(item.id ?? item["o:id"]),
-    title: item.title || item["o:title"] || "Sans titre",
-
+    id:Number(item.id ?? item["o:id"]),
+    title:item.title || item["o:title"] || "Sans titre",
     identifier:
       item.identifier ||
-      item["artinq:id"]?.[0]?.["@value"] ||
-      "",
-
-    model: modelNames[animalCode] || "Modèle inconnu",
+      item["artinq:id"]?.[0]?.["@value"] || "",
+    model:modelNames[animalCode] || "Modèle inconnu",
     animalCode,
-
     taskId:
       item.taskId ||
-      item["artinq:taskId"]?.[0]?.["@value"] ||
-      "",
-
+      item["artinq:taskId"]?.[0]?.["@value"] || "",
     content:
       item.content ||
-      item["artinq:content"]?.[0]?.["@value"] ||
-      ""
+      item["artinq:content"]?.[0]?.["@value"] || ""
   };
 }
-
-// Réponses de démonstration stockées uniquement
-// dans le navigateur de l'utilisateur.
 
 function readDemoResponses() {
   try {
@@ -796,37 +707,31 @@ function readDemoResponses() {
       typeof r.animalCode === "string" &&
       typeof r.taskId === "string"
     );
-
-  } catch (error) {
+  } catch(error) {
     return [];
   }
 }
 
-function demoMutation(endpoint, payload) {
+function demoMutation(endpoint,payload) {
   const saved = readDemoResponses();
 
   if (endpoint === "create-response.php") {
-    const id =
-      Math.max(999999, ...saved.map(r => r.id)) + 1;
+    const id = Math.max(
+      999999,...saved.map(r => r.id)
+    ) + 1;
 
-    const entry = {
+    saved.push({
       id,
-      title: payload.title,
-      content: payload.content,
-      animalCode: payload.animalCode,
-      taskId: payload.taskId,
-      model: modelNames[payload.animalCode] || "Modèle inconnu",
-      identifier: "response-test-" + id
-    };
+      title:payload.title,
+      content:payload.content,
+      animalCode:payload.animalCode,
+      taskId:payload.taskId,
+      model:modelNames[payload.animalCode] || "Modèle inconnu",
+      identifier:"response-test-" + id
+    });
 
-    saved.push(entry);
-
-    localStorage.setItem(
-      DEMO_KEY,
-      JSON.stringify(saved)
-    );
-
-    return { id };
+    localStorage.setItem(DEMO_KEY,JSON.stringify(saved));
+    return {id};
   }
 
   const index = saved.findIndex(
@@ -834,42 +739,31 @@ function demoMutation(endpoint, payload) {
   );
 
   if (index === -1) {
-    throw new Error(
-      "Réponse de démonstration introuvable."
-    );
+    throw new Error("Réponse de démonstration introuvable.");
   }
 
   if (endpoint === "update-response.php") {
     saved[index].title = payload.title;
     saved[index].content = payload.content;
-
   } else if (endpoint === "delete-response.php") {
-    saved.splice(index, 1);
-
+    saved.splice(index,1);
   } else {
     throw new Error("Opération inconnue.");
   }
 
-  localStorage.setItem(
-    DEMO_KEY,
-    JSON.stringify(saved)
-  );
-
-  return { id: Number(payload.id) };
+  localStorage.setItem(DEMO_KEY,JSON.stringify(saved));
+  return {id:Number(payload.id)};
 }
 
 async function loadResponses() {
-  $("responseList").textContent =
-    "Chargement des réponses...";
+  $("responseList").textContent = "Chargement des réponses...";
 
   try {
     const url = IS_GITHUB_PAGES
       ? OMEKA_URL
       : `${OMEKA_URL}?resource_class_id=${RESPONSE_CLASS_ID}&per_page=100`;
 
-    const response = await fetch(url, {
-      cache: "no-store"
-    });
+    const response = await fetch(url,{cache:"no-store"});
 
     if (!response.ok) {
       throw new Error("Erreur HTTP " + response.status);
@@ -884,39 +778,27 @@ async function loadResponses() {
     responses = items.map(mapItem);
 
     if (IS_GITHUB_PAGES) {
-      responses = responses.concat(
-        readDemoResponses()
-      );
+      responses = responses.concat(readDemoResponses());
     }
 
     $("totalCount").textContent = responses.length;
-
     $("modelCount").textContent =
       new Set(responses.map(r => r.model)).size;
 
     renderResponses();
-
-  } catch (error) {
+  } catch(error) {
     responses = [];
-
     $("totalCount").textContent = "—";
     $("modelCount").textContent = "—";
-
     $("responseList").textContent =
-      "Impossible de récupérer les réponses : " +
-      error.message;
+      "Impossible de récupérer les réponses : " + error.message;
   }
 }
 
-function makeBadge(text, neutral = false) {
+function makeBadge(text,neutral=false) {
   const badge = document.createElement("span");
-
-  badge.className = neutral
-    ? "badge badge-neutral"
-    : "badge";
-
+  badge.className = neutral ? "badge badge-neutral" : "badge";
   badge.textContent = text;
-
   return badge;
 }
 
@@ -927,7 +809,7 @@ function renderResponses() {
   list.replaceChildren();
 
   const filtered = responses.filter(r =>
-    [r.title, r.model, r.animalCode, r.taskId, r.content]
+    [r.title,r.model,r.animalCode,r.taskId,r.content]
       .some(value =>
         String(value || "").toLowerCase().includes(query)
       )
@@ -936,7 +818,7 @@ function renderResponses() {
   $("visibleCount").textContent =
     filtered.length + " réponse(s) affichée(s)";
 
-  if (filtered.length === 0) {
+  if (!filtered.length) {
     const empty = document.createElement("div");
     empty.className = "empty";
     empty.textContent = "Aucune réponse trouvée.";
@@ -958,7 +840,7 @@ function renderResponses() {
     idBadge.className = "id-badge";
     idBadge.textContent = "#" + r.id;
 
-    top.append(heading, idBadge);
+    top.append(heading,idBadge);
 
     const badges = document.createElement("div");
     badges.className = "badges";
@@ -966,7 +848,7 @@ function renderResponses() {
     badges.append(
       makeBadge(r.model),
       makeBadge("Animal : " + (r.animalCode || "—")),
-      makeBadge("Tâche : " + (r.taskId || "—"), true)
+      makeBadge("Tâche : " + (r.taskId || "—"),true)
     );
 
     const content = document.createElement("p");
@@ -976,37 +858,42 @@ function renderResponses() {
     const footer = document.createElement("div");
     footer.className = "card-footer";
 
-    if (canEdit(r)) {
-      const actions = document.createElement("div");
-      actions.className = "actions";
+    const actions = document.createElement("div");
+    actions.className = "actions";
 
-      const edit = document.createElement("button");
-      edit.type = "button";
-      edit.className = "btn btn-small";
-      edit.textContent = "Modifier";
-      edit.onclick = () => editResponse(r.id);
+    const edit = document.createElement("button");
+    edit.type = "button";
+    edit.className = "btn btn-small";
+    edit.textContent = "Modifier";
+    edit.disabled = !canEdit(r);
+    edit.title = edit.disabled
+      ? "Réponse originale protégée ou accès non autorisé"
+      : "Modifier cette réponse";
+    edit.onclick = () => editResponse(r.id);
 
-      const remove = document.createElement("button");
-      remove.type = "button";
-      remove.className = "btn btn-danger btn-small";
-      remove.textContent = "Supprimer";
-      remove.onclick = () => deleteResponse(r.id);
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "btn btn-danger btn-small";
+    remove.textContent = "Supprimer";
+    remove.disabled = !canEdit(r);
+    remove.title = remove.disabled
+      ? "Réponse originale protégée ou accès non autorisé"
+      : "Supprimer cette réponse";
+    remove.onclick = () => deleteResponse(r.id);
 
-      actions.append(edit, remove);
-      footer.appendChild(actions);
+    actions.append(edit,remove);
+    footer.appendChild(actions);
 
-    } else {
-      const note = document.createElement("span");
-      note.className = "protected";
+    const note = document.createElement("span");
+    note.className = "protected";
+    note.textContent = originalIds.has(r.id)
+      ? "Réponse originale protégée"
+      : IS_GITHUB_PAGES
+        ? "Réponse de démonstration"
+        : "Réponse de test";
+    footer.appendChild(note);
 
-      note.textContent = originalIds.has(r.id)
-        ? "Réponse originale protégée"
-        : "Consultation uniquement";
-
-      footer.appendChild(note);
-    }
-
-    card.append(top, badges, content, footer);
+    card.append(top,badges,content,footer);
     list.appendChild(card);
   });
 }
@@ -1015,7 +902,7 @@ function editResponse(id) {
   const r = responses.find(item => item.id === id);
 
   if (!r || !canEdit(r)) {
-    showMessage("Modification non autorisée.", "error");
+    showMessage("Modification non autorisée.","error");
     return;
   }
 
@@ -1026,48 +913,42 @@ function editResponse(id) {
   $("taskId").value = r.taskId;
   $("content").value = r.content;
 
-  ["model", "animalCode", "taskId"].forEach(fieldId => {
-    $(fieldId).disabled = true;
+  ["model","animalCode","taskId"].forEach(id => {
+    $(id).disabled = true;
   });
 
-  $("formHeading").textContent =
-    "Modifier la réponse #" + id;
-
+  $("formHeading").textContent = "Modifier la réponse #" + id;
   updateFormAvailability();
 
   $("formSection").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
+    behavior:"smooth",
+    block:"start"
   });
 }
 
-async function sendMutation(endpoint, payload) {
+async function sendMutation(endpoint,payload) {
   if (IS_GITHUB_PAGES) {
-    return demoMutation(endpoint, payload);
+    return demoMutation(endpoint,payload);
   }
 
   if (!isAdmin || !csrfToken) {
-    throw new Error(
-      "Connexion administrateur requise."
-    );
+    throw new Error("Connexion administrateur requise.");
   }
 
-  const response = await fetch(API + "/" + endpoint, {
-    method: "POST",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRF-Token": csrfToken
+  const response = await fetch(API + "/" + endpoint,{
+    method:"POST",
+    credentials:"same-origin",
+    headers:{
+      "Content-Type":"application/json",
+      "X-CSRF-Token":csrfToken
     },
-    body: JSON.stringify(payload)
+    body:JSON.stringify(payload)
   });
 
   const result = await response.json();
 
   if (!response.ok) {
-    throw new Error(
-      result.message || "Opération refusée."
-    );
+    throw new Error(result.message || "Opération refusée.");
   }
 
   return result;
@@ -1075,7 +956,6 @@ async function sendMutation(endpoint, payload) {
 
 async function saveResponse(event) {
   event.preventDefault();
-
   if (busy) return;
 
   const id = $("editId").value;
@@ -1083,10 +963,7 @@ async function saveResponse(event) {
   const content = $("content").value.trim();
 
   if (!title || !content) {
-    showMessage(
-      "Le titre et le contenu sont obligatoires.",
-      "error"
-    );
+    showMessage("Le titre et le contenu sont obligatoires.","error");
     return;
   }
 
@@ -1096,10 +973,7 @@ async function saveResponse(event) {
     );
 
     if (!existing || !canEdit(existing)) {
-      showMessage(
-        "Modification non autorisée.",
-        "error"
-      );
+      showMessage("Modification non autorisée.","error");
       return;
     }
   }
@@ -1111,25 +985,18 @@ async function saveResponse(event) {
     let result;
 
     if (id) {
-      result = await sendMutation(
-        "update-response.php",
-        {
-          id: Number(id),
-          title,
-          content
-        }
-      );
-
+      result = await sendMutation("update-response.php",{
+        id:Number(id),
+        title,
+        content
+      });
     } else {
       const animalCode = $("animalCode").value;
       const model = $("model").value;
       const taskId = $("taskId").value.trim();
 
-      if (
-        !animalCode ||
-        !model ||
-        animalForModel[model] !== animalCode
-      ) {
+      if (!animalCode || !model ||
+          animalForModel[model] !== animalCode) {
         throw new Error(
           "Le modèle et le code animal doivent correspondre."
         );
@@ -1141,15 +1008,9 @@ async function saveResponse(event) {
         );
       }
 
-      result = await sendMutation(
-        "create-response.php",
-        {
-          title,
-          content,
-          animalCode,
-          taskId
-        }
-      );
+      result = await sendMutation("create-response.php",{
+        title,content,animalCode,taskId
+      });
     }
 
     resetForm();
@@ -1163,10 +1024,8 @@ async function saveResponse(event) {
       " : réponse #" + result.id + ".",
       "success"
     );
-
-  } catch (error) {
-    showMessage(error.message, "error");
-
+  } catch(error) {
+    showMessage(error.message,"error");
   } finally {
     busy = false;
     updateFormAvailability();
@@ -1177,23 +1036,17 @@ async function deleteResponse(id) {
   const r = responses.find(item => item.id === id);
 
   if (!r || !canEdit(r)) {
-    showMessage(
-      "Suppression non autorisée.",
-      "error"
-    );
+    showMessage("Suppression non autorisée.","error");
     return;
   }
 
   if (!confirm(
     `Supprimer la réponse "${r.title}" (ID ${id}) ?`
-  )) {
-    return;
-  }
+  )) return;
 
   try {
     const result = await sendMutation(
-      "delete-response.php",
-      { id }
+      "delete-response.php",{id}
     );
 
     if (Number($("editId").value) === id) {
@@ -1209,38 +1062,22 @@ async function deleteResponse(id) {
         : "dans Omeka S."),
       "success"
     );
-
-  } catch (error) {
-    showMessage(error.message, "error");
+  } catch(error) {
+    showMessage(error.message,"error");
   }
 }
 
-$("responseForm").addEventListener(
-  "submit",
-  saveResponse
-);
+$("responseForm").addEventListener("submit",saveResponse);
+$("cancelButton").addEventListener("click",resetForm);
+$("refreshButton").addEventListener("click",loadResponses);
+$("search").addEventListener("input",renderResponses);
 
-$("cancelButton").addEventListener(
-  "click",
-  resetForm
-);
-
-$("refreshButton").addEventListener(
-  "click",
-  loadResponses
-);
-
-$("search").addEventListener(
-  "input",
-  renderResponses
-);
-
-$("model").addEventListener("change", () => {
+$("model").addEventListener("change",() => {
   $("animalCode").value =
     animalForModel[$("model").value] || "";
 });
 
-$("animalCode").addEventListener("change", () => {
+$("animalCode").addEventListener("change",() => {
   $("model").value =
     modelNames[$("animalCode").value] || "";
 });
@@ -1250,17 +1087,9 @@ async function initialize() {
     csrfToken = null;
     isAdmin = false;
 
-    setConnection(
-      "Version publique : démonstration interactive du CRUD. " +
-      "Les modifications sont enregistrées uniquement " +
-      "dans ce navigateur."
-    );
-
-    $("accessStatus").textContent = "Démo";
-
     configureAuthentication();
+    updateDemoSession();
     updateFormAvailability();
-
   } else {
     await checkAuthentication();
   }
