@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Artificial Inquiries — Gathering Evidence</title>
-
 <style>
 :root {
   --navy:#14243d;
@@ -18,7 +17,6 @@
   --red:#b93f4d;
 }
 * { box-sizing:border-box; }
-html { scroll-behavior:smooth; }
 body {
   margin:0;
   font-family:"Segoe UI",Arial,sans-serif;
@@ -26,7 +24,7 @@ body {
   color:var(--text);
   line-height:1.6;
 }
-button,input,select,textarea { font:inherit; }
+button,input { font:inherit; }
 button { cursor:pointer; }
 .container {
   max-width:1180px;
@@ -39,38 +37,30 @@ button { cursor:pointer; }
   padding:57px 0 65px;
 }
 .eyebrow {
-  display:inline-block;
   color:#c4d7f0;
   font-size:12px;
   font-weight:700;
   text-transform:uppercase;
   letter-spacing:2px;
-  margin-bottom:12px;
 }
 .hero h1 {
-  margin:0;
+  margin:10px 0 0;
   font-size:clamp(32px,5vw,49px);
-  letter-spacing:-1.5px;
-  line-height:1.15;
 }
 .hero p {
   max-width:660px;
   color:#d9e5f3;
-  margin:18px 0 0;
 }
 .hero-label {
   display:inline-block;
-  margin-top:22px;
+  margin-top:15px;
   padding:7px 13px;
   background:rgba(255,255,255,.12);
   border:1px solid rgba(255,255,255,.2);
   border-radius:30px;
   font-size:12px;
 }
-main {
-  padding-top:34px!important;
-  padding-bottom:55px!important;
-}
+main { padding-top:34px!important; padding-bottom:55px!important; }
 .panel {
   background:white;
   border:1px solid var(--border);
@@ -98,14 +88,11 @@ main {
   color:var(--muted);
 }
 .status-box {
-  display:flex;
-  align-items:center;
-  gap:12px;
+  padding:15px 18px;
+  border-radius:10px;
   background:#edf4fc;
   color:#254d7c;
   border:1px solid #d8e7f7;
-  padding:15px 18px;
-  border-radius:10px;
   font-size:14px;
 }
 .status-box.success {
@@ -137,16 +124,8 @@ main {
   color:var(--navy);
 }
 .stat-label {
-  display:block;
   font-size:12px;
   color:var(--muted);
-  margin-top:5px;
-}
-.actions {
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:10px;
 }
 .btn {
   display:inline-flex;
@@ -161,75 +140,19 @@ main {
   font-size:13px;
   text-decoration:none;
 }
-.btn:hover:not(:disabled) {
-  filter:brightness(.94);
-}
-.btn:disabled {
-  opacity:.45;
-  cursor:not-allowed;
-}
 .btn-secondary {
   background:#edf2f8;
   color:#203a5e;
   border-color:#e0e7f0;
 }
-.btn-danger {
-  background:var(--red);
-  color:white;
-}
-.btn-small {
-  padding:8px 13px;
-  font-size:12px;
-}
-.form-grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:0 20px;
-}
-.field { margin-bottom:19px; }
-label {
-  display:block;
-  font-size:13px;
-  font-weight:650;
-  color:#33455d;
-  margin-bottom:7px;
-}
-input,select,textarea {
+.btn-small { padding:8px 13px; font-size:12px; }
+.actions { display:flex; flex-wrap:wrap; gap:10px; }
+.search-row { margin-bottom:23px; }
+.search-row input {
   width:100%;
   border:1px solid #cfd9e6;
   border-radius:9px;
   padding:12px 14px;
-  background:white;
-  color:var(--text);
-}
-input:focus,select:focus,textarea:focus {
-  outline:none;
-  border-color:var(--blue);
-  box-shadow:0 0 0 3px rgba(53,102,160,.12);
-}
-input:disabled,select:disabled {
-  background:#edf1f6;
-  color:#758298;
-}
-textarea {
-  min-height:155px;
-  resize:vertical;
-}
-.form-note {
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:22px;
-}
-.search-row {
-  display:flex;
-  gap:14px;
-  align-items:center;
-  margin-bottom:23px;
-}
-.search-row input { flex:1; }
-.count-label {
-  color:var(--muted);
-  font-size:13px;
 }
 .responses-grid {
   display:grid;
@@ -243,17 +166,7 @@ textarea {
   background:white;
   min-width:0;
 }
-.response-card:hover {
-  border-color:#c3d4e9;
-  box-shadow:0 7px 24px rgba(23,43,73,.07);
-}
-.card-top {
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-}
 .response-card h3 {
-  font-size:17px;
   margin:0 0 13px;
   color:var(--navy);
   overflow-wrap:anywhere;
@@ -264,45 +177,30 @@ textarea {
   border-radius:6px;
   padding:4px 8px;
   font-size:11px;
-  font-weight:700;
-  white-space:nowrap;
 }
-.badges {
+.card-top {
   display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  margin-bottom:16px;
+  justify-content:space-between;
+  gap:12px;
 }
+.badges { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:16px; }
 .badge {
   background:#eaf1fa;
   color:#315c8e;
   border-radius:6px;
   padding:5px 9px;
   font-size:11px;
-  font-weight:650;
-}
-.badge-neutral {
-  background:#f0f3f7;
-  color:#68778b;
 }
 .card-content {
   white-space:pre-wrap;
   overflow-wrap:anywhere;
-  font-size:14px;
   color:#47566b;
-  margin-bottom:18px;
+  font-size:14px;
 }
 .card-footer {
-  padding-top:15px;
   border-top:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:10px;
-}
-.protected {
-  font-size:12px;
-  color:#78869a;
+  padding-top:15px;
+  margin-top:18px;
 }
 .empty {
   grid-column:1/-1;
@@ -314,40 +212,25 @@ textarea {
 }
 footer {
   text-align:center;
-  padding:30px 20px;
+  padding:30px;
   color:var(--muted);
-  font-size:13px;
   border-top:1px solid var(--border);
 }
 @media(max-width:760px) {
-  .stats,.responses-grid,.form-grid {
-    grid-template-columns:1fr;
-  }
+  .stats,.responses-grid { grid-template-columns:1fr; }
   .panel { padding:20px; }
-  .hero { padding:40px 0 45px; }
-  .search-row {
-    flex-direction:column;
-    align-items:stretch;
-  }
-  .container {
-    padding-left:16px;
-    padding-right:16px;
-  }
 }
 </style>
 </head>
-
 <body>
 
 <header class="hero">
   <div class="container">
-    <span class="eyebrow">
-      Exercice 08 · Intelligence artificielle
-    </span>
+    <span class="eyebrow">Exercice 08 · Intelligence artificielle</span>
     <h1>Gathering Evidence</h1>
     <p>
-      Interface de gestion et d'exploration des réponses produites
-      par les modèles d'intelligence artificielle.
+      Interface de gestion et d'exploration des réponses
+      produites par les modèles d'intelligence artificielle.
     </p>
     <span class="hero-label">
       Projet Artificial Inquiries · Omeka S
@@ -361,15 +244,15 @@ footer {
   <div class="section-heading">
     <div>
       <h2>Vue d'ensemble</h2>
-      <p>État de la connexion et données de l'exercice.</p>
+      <p>Connexion à la base Omeka S commune.</p>
     </div>
-    <button id="refreshButton" class="btn btn-secondary" type="button">
+    <button id="refreshButton" class="btn btn-secondary">
       ↻ Actualiser
     </button>
   </div>
 
   <div id="connectionStatus" class="status-box" role="status">
-    <span id="connectionText">Chargement...</span>
+    Connexion en cours...
   </div>
 
   <div class="stats">
@@ -379,101 +262,46 @@ footer {
     </div>
     <div class="stat">
       <span id="modelCount" class="stat-number">—</span>
-      <span class="stat-label">Modèles représentés</span>
+      <span class="stat-label">Modèles liés</span>
     </div>
     <div class="stat">
-      <span id="accessStatus" class="stat-number">—</span>
+      <span id="accessStatus" class="stat-number">Lecture</span>
       <span class="stat-label">Mode d'accès</span>
     </div>
   </div>
 
-  <div class="actions" id="authActions"></div>
-</section>
-
-<section class="panel" id="formSection">
-  <div class="section-heading">
-    <div>
-      <h2 id="formHeading">Ajouter une réponse</h2>
-      <p>Créer ou modifier une réponse de test.</p>
-    </div>
+  <div class="actions">
+    <a class="btn btn-secondary"
+       href="https://humanum-p8.fr/omk_artificialinquiries/admin"
+       target="_blank" rel="noopener noreferrer">
+       Administration Omeka S
+    </a>
+    <a class="btn"
+       href="https://humanum-p8.fr/omk_artificialinquiries/admin/item/add"
+       target="_blank" rel="noopener noreferrer">
+       Ajouter une réponse dans Omeka S
+    </a>
   </div>
-
-  <p class="form-note" id="formNote"></p>
-
-  <form id="responseForm">
-    <input type="hidden" id="editId">
-
-    <div class="field">
-      <label for="title">Titre de la réponse</label>
-      <input id="title" maxlength="200" required
-             placeholder="Exemple : Response Test Interface">
-    </div>
-
-    <div class="form-grid">
-      <div class="field">
-        <label for="model">Modèle d'IA</label>
-        <select id="model" required>
-          <option value="">Sélectionner un modèle</option>
-          <option value="Model 1">Model 1</option>
-          <option value="Model 2">Model 2</option>
-          <option value="Model 3">Model 3</option>
-          <option value="Model 4">Model 4</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="animalCode">Code animal</label>
-        <select id="animalCode" required>
-          <option value="">Sélectionner un code</option>
-          <option value="giraffe">Giraffe</option>
-          <option value="sloth">Sloth</option>
-          <option value="dragon">Dragon</option>
-          <option value="turkey">Turkey</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="taskId">Identifiant de la tâche</label>
-      <input id="taskId" value="task-1" required>
-    </div>
-
-    <div class="field">
-      <label for="content">Contenu de la réponse</label>
-      <textarea id="content" required
-        placeholder="Saisir le contenu de la réponse..."></textarea>
-    </div>
-
-    <div class="actions">
-      <button type="submit" id="saveButton" class="btn">
-        Créer la réponse
-      </button>
-      <button type="button" id="cancelButton" class="btn btn-secondary">
-        Annuler
-      </button>
-    </div>
-  </form>
-
-  <div id="formMessage" role="status" aria-live="polite"
-       style="margin-top:18px"></div>
 </section>
 
 <section class="panel">
   <div class="section-heading">
     <div>
       <h2>Bibliothèque des réponses</h2>
-      <p>Consulter, rechercher et gérer les réponses.</p>
+      <p>
+        Ressources de type artinq:ReponseLLM
+        provenant de la base commune.
+      </p>
     </div>
   </div>
 
   <div class="search-row">
     <input id="search" type="search"
-           aria-label="Rechercher une réponse"
-           placeholder="Rechercher par titre, modèle, code ou contenu...">
-    <span id="visibleCount" class="count-label"></span>
+           placeholder="Rechercher par titre, contenu ou identifiant...">
   </div>
 
-  <div id="responseList" class="responses-grid" aria-live="polite"></div>
+  <p id="visibleCount"></p>
+  <div id="responseList" class="responses-grid"></div>
 </section>
 
 </main>
@@ -485,321 +313,109 @@ footer {
 <script>
 "use strict";
 
-const IS_GITHUB_PAGES =
-  window.location.hostname.endsWith(".github.io");
+const OMEKA_BASE =
+  "https://humanum-p8.fr/omk_artificialinquiries";
 
-const API = "/artificial-inquiries-api";
+const RESPONSE_CLASS_ID = 147;
+const RESPONSE_TEMPLATE_ID = 18;
 
-const OMEKA_URL = IS_GITHUB_PAGES
-  ? "./responses.json"
-  : "/omeka-s/api/items";
-
-const RESPONSE_CLASS_ID = 112;
-const DEMO_KEY = "artificial-inquiries-demo-responses-v1";
-const DEMO_SESSION_KEY = "artificial-inquiries-demo-session-v1";
-
-const originalIds = new Set([13,14,15,16]);
-
-const modelNames = {
-  giraffe:"Model 1",
-  sloth:"Model 2",
-  dragon:"Model 3",
-  turkey:"Model 4"
-};
-
-const animalForModel = {
-  "Model 1":"giraffe",
-  "Model 2":"sloth",
-  "Model 3":"dragon",
-  "Model 4":"turkey"
-};
+const API_URL =
+  `${OMEKA_BASE}/api/items?resource_class_id=${RESPONSE_CLASS_ID}&per_page=100`;
 
 let responses = [];
-let csrfToken = null;
-let isAdmin = false;
-let busy = false;
 
 const $ = id => document.getElementById(id);
 
-function setConnection(message,type="") {
-  $("connectionStatus").className =
-    "status-box" + (type ? " " + type : "");
-  $("connectionText").textContent = message;
-}
-
-function showMessage(message,type="") {
-  $("formMessage").className =
-    message ? "status-box" + (type ? " " + type : "") : "";
-  $("formMessage").textContent = message;
-}
-
-function isTemporary(r) {
-  return typeof r.identifier === "string"
-    && r.identifier.startsWith("response-test-")
-    && !originalIds.has(Number(r.id));
-}
-
-function canEdit(r) {
-  return (IS_GITHUB_PAGES || isAdmin) && isTemporary(r);
-}
-
-function updateFormAvailability() {
-  $("saveButton").disabled =
-    busy || !(IS_GITHUB_PAGES || isAdmin);
-
-  $("saveButton").textContent = $("editId").value
-    ? "Enregistrer les modifications"
-    : "Créer la réponse";
-}
-
-function addAuthButton(text,callback,danger=false) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className =
-    "btn " + (danger ? "btn-danger" : "btn-secondary");
-  button.textContent = text;
-  button.addEventListener("click",callback);
-  $("authActions").appendChild(button);
-}
-
-function configureAuthentication() {
-  $("authActions").replaceChildren();
-
-  if (IS_GITHUB_PAGES) {
-    $("formNote").textContent =
-      "Mode démonstration : les réponses créées, modifiées ou " +
-      "supprimées sont enregistrées uniquement dans ce navigateur. " +
-      "Les réponses originales d'Omeka S sont protégées.";
-
-    addAuthButton("Connexion administrateur (démo)",() => {
-      sessionStorage.setItem(DEMO_SESSION_KEY,"active");
-      updateDemoSession();
-    });
-
-    addAuthButton("Se déconnecter (démo)",() => {
-      sessionStorage.removeItem(DEMO_SESSION_KEY);
-      updateDemoSession();
-      resetForm();
-    },true);
-
-    return;
-  }
-
-  $("formNote").textContent = isAdmin
-    ? "Session administrateur active. Les modifications autorisées " +
-      "sont enregistrées dans Omeka S."
-    : "Connectez-vous comme administrateur pour effectuer le CRUD.";
-
-  const link = document.createElement("a");
-  link.className = "btn btn-secondary";
-  link.href = API + (isAdmin ? "/logout.php" : "/login.php");
-  link.textContent = isAdmin
-    ? "Se déconnecter"
-    : "Connexion administrateur";
-  $("authActions").appendChild(link);
-}
-
-function updateDemoSession() {
-  const active =
-    sessionStorage.getItem(DEMO_SESSION_KEY) === "active";
-
-  $("accessStatus").textContent =
-    active ? "Démo admin" : "Démo";
-
-  setConnection(
-    active
-      ? "Session de démonstration active. CRUD de test disponible."
-      : "Version publique : CRUD de démonstration disponible. " +
-        "Les modifications restent dans ce navigateur.",
-    active ? "success" : ""
-  );
-}
-
-function resetForm() {
-  $("responseForm").reset();
-  $("editId").value = "";
-  $("taskId").value = "task-1";
-  $("formHeading").textContent = "Ajouter une réponse";
-
-  ["model","animalCode","taskId"].forEach(id => {
-    $(id).disabled = false;
-  });
-
-  updateFormAvailability();
-}
-
-async function checkAuthentication() {
-  try {
-    const response = await fetch(API + "/csrf.php",{
-      credentials:"same-origin",
-      cache:"no-store"
-    });
-
-    if (!response.ok) throw new Error("Session absente.");
-
-    const data = await response.json();
-
-    if (data.status !== "ready" || !data.csrf_token) {
-      throw new Error("Session non autorisée.");
-    }
-
-    csrfToken = data.csrf_token;
-    isAdmin = true;
-
-    setConnection(
-      "Session administrateur active. " +
-      "Les opérations autorisées sont disponibles.",
-      "success"
-    );
-  } catch(error) {
-    csrfToken = null;
-    isAdmin = false;
-
-    setConnection(
-      "Mode consultation : connectez-vous pour gérer les réponses."
-    );
-  }
-
-  $("accessStatus").textContent = isAdmin ? "Admin" : "Lecture";
-  configureAuthentication();
-  updateFormAvailability();
+function getLiteral(item, property) {
+  const values = item[property];
+  if (!Array.isArray(values)) return "";
+  return values.find(value => typeof value["@value"] === "string")
+    ?.["@value"] || "";
 }
 
 function mapItem(item) {
-  const animalCode =
-    item.animalCode ||
-    item["artinq:animalCode"]?.[0]?.["@value"] ||
-    "";
+  const linkedModel = item["artinq:produitePar"]?.[0];
 
   return {
-    id:Number(item.id ?? item["o:id"]),
-    title:item.title || item["o:title"] || "Sans titre",
-    identifier:
-      item.identifier ||
-      item["artinq:id"]?.[0]?.["@value"] || "",
-    model:modelNames[animalCode] || "Modèle inconnu",
-    animalCode,
-    taskId:
-      item.taskId ||
-      item["artinq:taskId"]?.[0]?.["@value"] || "",
-    content:
-      item.content ||
-      item["artinq:content"]?.[0]?.["@value"] || ""
+    id: Number(item["o:id"]),
+    title: getLiteral(item, "dcterms:title")
+      || item["o:title"] || "Sans titre",
+    identifier: getLiteral(item, "dcterms:identifier"),
+    content: getLiteral(item, "artinq:texte"),
+    status: getLiteral(item, "artinq:statut"),
+    model: linkedModel?.["o:title"] || "",
+    modelId: linkedModel?.value_resource_id || null,
+    templateId: item["o:resource_template"]?.["o:id"]
   };
 }
 
-function readDemoResponses() {
-  try {
-    const data = JSON.parse(
-      localStorage.getItem(DEMO_KEY) || "[]"
-    );
-
-    if (!Array.isArray(data)) return [];
-
-    return data.filter(r =>
-      r &&
-      Number.isSafeInteger(r.id) &&
-      r.id >= 1000000 &&
-      typeof r.title === "string" &&
-      typeof r.content === "string" &&
-      typeof r.identifier === "string" &&
-      r.identifier.startsWith("response-test-") &&
-      typeof r.animalCode === "string" &&
-      typeof r.taskId === "string"
-    );
-  } catch(error) {
-    return [];
-  }
-}
-
-function demoMutation(endpoint,payload) {
-  const saved = readDemoResponses();
-
-  if (endpoint === "create-response.php") {
-    const id = Math.max(
-      999999,...saved.map(r => r.id)
-    ) + 1;
-
-    saved.push({
-      id,
-      title:payload.title,
-      content:payload.content,
-      animalCode:payload.animalCode,
-      taskId:payload.taskId,
-      model:modelNames[payload.animalCode] || "Modèle inconnu",
-      identifier:"response-test-" + id
-    });
-
-    localStorage.setItem(DEMO_KEY,JSON.stringify(saved));
-    return {id};
-  }
-
-  const index = saved.findIndex(
-    r => r.id === Number(payload.id)
-  );
-
-  if (index === -1) {
-    throw new Error("Réponse de démonstration introuvable.");
-  }
-
-  if (endpoint === "update-response.php") {
-    saved[index].title = payload.title;
-    saved[index].content = payload.content;
-  } else if (endpoint === "delete-response.php") {
-    saved.splice(index,1);
-  } else {
-    throw new Error("Opération inconnue.");
-  }
-
-  localStorage.setItem(DEMO_KEY,JSON.stringify(saved));
-  return {id:Number(payload.id)};
+function setConnection(message, type = "") {
+  const box = $("connectionStatus");
+  box.className = "status-box" + (type ? " " + type : "");
+  box.textContent = message;
 }
 
 async function loadResponses() {
   $("responseList").textContent = "Chargement des réponses...";
+  setConnection("Connexion à la base Omeka S commune...");
 
   try {
-    const url = IS_GITHUB_PAGES
-      ? OMEKA_URL
-      : `${OMEKA_URL}?resource_class_id=${RESPONSE_CLASS_ID}&per_page=100`;
-
-    const response = await fetch(url,{cache:"no-store"});
+    const response = await fetch(API_URL, {
+      method: "GET",
+      cache: "no-store",
+      headers: { "Accept": "application/json" }
+    });
 
     if (!response.ok) {
-      throw new Error("Erreur HTTP " + response.status);
+      throw new Error(`Erreur HTTP ${response.status}`);
     }
 
-    const items = await response.json();
+    const data = await response.json();
 
-    if (!Array.isArray(items)) {
-      throw new Error("Format API inattendu.");
+    if (!Array.isArray(data)) {
+      throw new Error("Format de réponse inattendu.");
     }
 
-    responses = items.map(mapItem);
-
-    if (IS_GITHUB_PAGES) {
-      responses = responses.concat(readDemoResponses());
-    }
+    responses = data
+      .filter(item =>
+        item["o:resource_class"]?.["o:id"] === RESPONSE_CLASS_ID &&
+        item["o:resource_template"]?.["o:id"] === RESPONSE_TEMPLATE_ID
+      )
+      .map(mapItem);
 
     $("totalCount").textContent = responses.length;
     $("modelCount").textContent =
-      new Set(responses.map(r => r.model)).size;
+      new Set(
+        responses.map(r => r.modelId).filter(Boolean)
+      ).size;
+
+    $("accessStatus").textContent = "API";
+
+    setConnection(
+      "Connexion réussie à la base Omeka S commune. " +
+      "Lecture réelle des ressources activée.",
+      "success"
+    );
 
     renderResponses();
-  } catch(error) {
+
+  } catch (error) {
     responses = [];
     $("totalCount").textContent = "—";
     $("modelCount").textContent = "—";
-    $("responseList").textContent =
-      "Impossible de récupérer les réponses : " + error.message;
-  }
-}
+    $("accessStatus").textContent = "Erreur";
 
-function makeBadge(text,neutral=false) {
-  const badge = document.createElement("span");
-  badge.className = neutral ? "badge badge-neutral" : "badge";
-  badge.textContent = text;
-  return badge;
+    setConnection(
+      "Impossible de lire la base commune depuis cette page. " +
+      "Vérifier notamment les autorisations CORS. " +
+      "Détail : " + error.message,
+      "error"
+    );
+
+    $("responseList").textContent =
+      "La lecture de l'API a échoué. " +
+      "Aucune donnée de démonstration n'est utilisée.";
+  }
 }
 
 function renderResponses() {
@@ -809,7 +425,7 @@ function renderResponses() {
   list.replaceChildren();
 
   const filtered = responses.filter(r =>
-    [r.title,r.model,r.animalCode,r.taskId,r.content]
+    [r.title, r.identifier, r.content, r.model, r.status]
       .some(value =>
         String(value || "").toLowerCase().includes(query)
       )
@@ -821,7 +437,8 @@ function renderResponses() {
   if (!filtered.length) {
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent = "Aucune réponse trouvée.";
+    empty.textContent =
+      "Aucune réponse LLM disponible dans la base commune.";
     list.appendChild(empty);
     return;
   }
@@ -836,20 +453,28 @@ function renderResponses() {
     const heading = document.createElement("h3");
     heading.textContent = r.title;
 
-    const idBadge = document.createElement("span");
-    idBadge.className = "id-badge";
-    idBadge.textContent = "#" + r.id;
+    const id = document.createElement("span");
+    id.className = "id-badge";
+    id.textContent = "#" + r.id;
 
-    top.append(heading,idBadge);
+    top.append(heading, id);
 
     const badges = document.createElement("div");
     badges.className = "badges";
 
-    badges.append(
-      makeBadge(r.model),
-      makeBadge("Animal : " + (r.animalCode || "—")),
-      makeBadge("Tâche : " + (r.taskId || "—"),true)
-    );
+    if (r.model) {
+      const model = document.createElement("span");
+      model.className = "badge";
+      model.textContent = "LLM : " + r.model;
+      badges.appendChild(model);
+    }
+
+    if (r.status) {
+      const status = document.createElement("span");
+      status.className = "badge";
+      status.textContent = "Statut : " + r.status;
+      badges.appendChild(status);
+    }
 
     const content = document.createElement("p");
     content.className = "card-content";
@@ -858,246 +483,23 @@ function renderResponses() {
     const footer = document.createElement("div");
     footer.className = "card-footer";
 
-    const actions = document.createElement("div");
-    actions.className = "actions";
+    const link = document.createElement("a");
+    link.className = "btn btn-secondary btn-small";
+    link.href = `${OMEKA_BASE}/admin/item/${r.id}`;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Voir / gérer dans Omeka S";
 
-    const edit = document.createElement("button");
-    edit.type = "button";
-    edit.className = "btn btn-small";
-    edit.textContent = "Modifier";
-    edit.disabled = !canEdit(r);
-    edit.title = edit.disabled
-      ? "Réponse originale protégée ou accès non autorisé"
-      : "Modifier cette réponse";
-    edit.onclick = () => editResponse(r.id);
-
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.className = "btn btn-danger btn-small";
-    remove.textContent = "Supprimer";
-    remove.disabled = !canEdit(r);
-    remove.title = remove.disabled
-      ? "Réponse originale protégée ou accès non autorisé"
-      : "Supprimer cette réponse";
-    remove.onclick = () => deleteResponse(r.id);
-
-    actions.append(edit,remove);
-    footer.appendChild(actions);
-
-    const note = document.createElement("span");
-    note.className = "protected";
-    note.textContent = originalIds.has(r.id)
-      ? "Réponse originale protégée"
-      : IS_GITHUB_PAGES
-        ? "Réponse de démonstration"
-        : "Réponse de test";
-    footer.appendChild(note);
-
-    card.append(top,badges,content,footer);
+    footer.appendChild(link);
+    card.append(top, badges, content, footer);
     list.appendChild(card);
   });
 }
 
-function editResponse(id) {
-  const r = responses.find(item => item.id === id);
+$("refreshButton").addEventListener("click", loadResponses);
+$("search").addEventListener("input", renderResponses);
 
-  if (!r || !canEdit(r)) {
-    showMessage("Modification non autorisée.","error");
-    return;
-  }
-
-  $("editId").value = r.id;
-  $("title").value = r.title;
-  $("model").value = r.model;
-  $("animalCode").value = r.animalCode;
-  $("taskId").value = r.taskId;
-  $("content").value = r.content;
-
-  ["model","animalCode","taskId"].forEach(id => {
-    $(id).disabled = true;
-  });
-
-  $("formHeading").textContent = "Modifier la réponse #" + id;
-  updateFormAvailability();
-
-  $("formSection").scrollIntoView({
-    behavior:"smooth",
-    block:"start"
-  });
-}
-
-async function sendMutation(endpoint,payload) {
-  if (IS_GITHUB_PAGES) {
-    return demoMutation(endpoint,payload);
-  }
-
-  if (!isAdmin || !csrfToken) {
-    throw new Error("Connexion administrateur requise.");
-  }
-
-  const response = await fetch(API + "/" + endpoint,{
-    method:"POST",
-    credentials:"same-origin",
-    headers:{
-      "Content-Type":"application/json",
-      "X-CSRF-Token":csrfToken
-    },
-    body:JSON.stringify(payload)
-  });
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Opération refusée.");
-  }
-
-  return result;
-}
-
-async function saveResponse(event) {
-  event.preventDefault();
-  if (busy) return;
-
-  const id = $("editId").value;
-  const title = $("title").value.trim();
-  const content = $("content").value.trim();
-
-  if (!title || !content) {
-    showMessage("Le titre et le contenu sont obligatoires.","error");
-    return;
-  }
-
-  if (id) {
-    const existing = responses.find(
-      r => r.id === Number(id)
-    );
-
-    if (!existing || !canEdit(existing)) {
-      showMessage("Modification non autorisée.","error");
-      return;
-    }
-  }
-
-  busy = true;
-  updateFormAvailability();
-
-  try {
-    let result;
-
-    if (id) {
-      result = await sendMutation("update-response.php",{
-        id:Number(id),
-        title,
-        content
-      });
-    } else {
-      const animalCode = $("animalCode").value;
-      const model = $("model").value;
-      const taskId = $("taskId").value.trim();
-
-      if (!animalCode || !model ||
-          animalForModel[model] !== animalCode) {
-        throw new Error(
-          "Le modèle et le code animal doivent correspondre."
-        );
-      }
-
-      if (taskId !== "task-1") {
-        throw new Error(
-          "Seule la tâche task-1 est autorisée actuellement."
-        );
-      }
-
-      result = await sendMutation("create-response.php",{
-        title,content,animalCode,taskId
-      });
-    }
-
-    resetForm();
-    await loadResponses();
-
-    showMessage(
-      "Opération réussie " +
-      (IS_GITHUB_PAGES
-        ? "(démonstration dans ce navigateur)"
-        : "(Omeka S)") +
-      " : réponse #" + result.id + ".",
-      "success"
-    );
-  } catch(error) {
-    showMessage(error.message,"error");
-  } finally {
-    busy = false;
-    updateFormAvailability();
-  }
-}
-
-async function deleteResponse(id) {
-  const r = responses.find(item => item.id === id);
-
-  if (!r || !canEdit(r)) {
-    showMessage("Suppression non autorisée.","error");
-    return;
-  }
-
-  if (!confirm(
-    `Supprimer la réponse "${r.title}" (ID ${id}) ?`
-  )) return;
-
-  try {
-    const result = await sendMutation(
-      "delete-response.php",{id}
-    );
-
-    if (Number($("editId").value) === id) {
-      resetForm();
-    }
-
-    await loadResponses();
-
-    showMessage(
-      "Réponse #" + result.id + " supprimée " +
-      (IS_GITHUB_PAGES
-        ? "de cette démonstration."
-        : "dans Omeka S."),
-      "success"
-    );
-  } catch(error) {
-    showMessage(error.message,"error");
-  }
-}
-
-$("responseForm").addEventListener("submit",saveResponse);
-$("cancelButton").addEventListener("click",resetForm);
-$("refreshButton").addEventListener("click",loadResponses);
-$("search").addEventListener("input",renderResponses);
-
-$("model").addEventListener("change",() => {
-  $("animalCode").value =
-    animalForModel[$("model").value] || "";
-});
-
-$("animalCode").addEventListener("change",() => {
-  $("model").value =
-    modelNames[$("animalCode").value] || "";
-});
-
-async function initialize() {
-  if (IS_GITHUB_PAGES) {
-    csrfToken = null;
-    isAdmin = false;
-
-    configureAuthentication();
-    updateDemoSession();
-    updateFormAvailability();
-  } else {
-    await checkAuthentication();
-  }
-
-  await loadResponses();
-}
-
-initialize();
+loadResponses();
 </script>
 
 </body>
