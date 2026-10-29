@@ -24,7 +24,7 @@ body {
   color:var(--text);
   line-height:1.6;
 }
-button,input { font:inherit; }
+button,input,textarea { font:inherit; }
 button { cursor:pointer; }
 .container {
   max-width:1180px;
@@ -220,6 +220,20 @@ footer {
   .stats,.responses-grid { grid-template-columns:1fr; }
   .panel { padding:20px; }
 }
+
+/* Ajouts : authentification et édition sécurisée */
+.auth-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.auth-method { padding:15px 12px; border:1px solid var(--border); border-radius:10px; background:#f8fafd; text-align:center; }
+.auth-method strong { display:block; color:var(--navy); }
+.auth-method small { display:block; color:var(--muted); margin-top:4px; }
+.notice { margin-top:16px; font-size:13px; color:var(--muted); }
+.form-grid { display:grid; gap:13px; }
+.form-grid label { font-weight:650; font-size:13px; }
+.form-grid input,.form-grid textarea { width:100%; border:1px solid #cfd9e6; border-radius:9px; padding:12px; background:#f8fafd; }
+.form-grid textarea { min-height:120px; resize:vertical; }
+.form-grid input:disabled,.form-grid textarea:disabled { opacity:.8; }
+.btn:disabled { cursor:not-allowed; opacity:.55; }
+@media(max-width:760px) { .auth-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 </style>
 </head>
 <body>
@@ -282,6 +296,39 @@ footer {
        Ajouter une réponse dans Omeka S
     </a>
   </div>
+</section>
+
+<section class="panel" aria-labelledby="authTitle">
+  <div class="section-heading">
+    <div>
+      <h2 id="authTitle">Authentification</h2>
+      <p>Modes de connexion prévus pour l'exercice 8.</p>
+    </div>
+  </div>
+  <div class="auth-grid">
+    <div class="auth-method"><strong>Omeka S</strong><small>À connecter à la passerelle</small></div>
+    <div class="auth-method"><strong>GitHub</strong><small>OAuth non configuré</small></div>
+    <div class="auth-method"><strong>Google</strong><small>OAuth non configuré</small></div>
+    <div class="auth-method"><strong>CAS Paris 8</strong><small>CAS non configuré</small></div>
+  </div>
+  <p class="notice">La consultation des réponses est publique. Les connexions ci-dessus ne sont pas encore actives : aucune clé API ni aucun mot de passe ne doit être saisi sur cette page.</p>
+</section>
+
+<section class="panel" aria-labelledby="createTitle">
+  <div class="section-heading">
+    <div>
+      <h2 id="createTitle">Créer une réponse LLM</h2>
+      <p>Formulaire préparé pour le Resource Template commun « Réponse LLM » (18).</p>
+    </div>
+  </div>
+  <form class="form-grid" aria-describedby="createNotice">
+    <label for="newTitle">Titre</label>
+    <input id="newTitle" type="text" placeholder="Titre de la réponse" disabled>
+    <label for="newContent">Texte de la réponse</label>
+    <textarea id="newContent" placeholder="Contenu de la réponse" disabled></textarea>
+    <button type="button" class="btn" disabled>Enregistrer dans Omeka S (bientôt)</button>
+  </form>
+  <p class="notice" id="createNotice">L'écriture depuis cette page sera activée après la mise en place de l'authentification et du backend sécurisé. Pour créer une vraie ressource dès maintenant, utilisez « Ajouter une réponse dans Omeka S » ci-dessus, puis actualisez la bibliothèque.</p>
 </section>
 
 <section class="panel">
@@ -405,8 +452,7 @@ async function loadResponses() {
     $("accessStatus").textContent = "Erreur";
 
     setConnection(
-      "Impossible de lire la base commune depuis cette page. " +
-      "Vérifier notamment les autorisations CORS. " +
+      "Impossible de lire les réponses via la passerelle Alwaysdata. " +
       "Détail : " + error.message,
       "error"
     );
@@ -487,7 +533,7 @@ function renderResponses() {
     link.href = `${OMEKA_BASE}/admin/item/${r.id}`;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
-    link.textContent = "Voir / gérer dans Omeka S";
+    link.textContent = "Voir / modifier / supprimer dans Omeka S";
 
     footer.appendChild(link);
     card.append(top, badges, content, footer);
