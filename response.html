@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Artificial Inquiries — Exercice 8 : consultation des réponses LLM liées à Omeka S et accès au CRUD sécurisé.">
 <title>Artificial Inquiries — Gathering Evidence</title>
 <style>
 :root {
@@ -231,36 +232,27 @@ footer {
   color:var(--muted);
   border-top:1px solid var(--border);
 }
-.auth-grid {
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
-}
-.auth-method {
-  padding:15px 12px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:#f8fafd;
-  text-align:center;
-}
-.auth-method strong {
-  display:block;
-  color:var(--navy);
-}
-.auth-method small {
-  display:block;
-  color:var(--muted);
-  margin-top:4px;
-}
 .notice {
   margin-top:16px;
   font-size:13px;
   color:var(--muted);
 }
+.toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.helper { font-size:13px; color:var(--muted); margin:12px 0 0; }
+.card-meta { font-size:12px; color:var(--muted); margin:0 0 10px; }
+.btn:focus-visible,input:focus-visible {
+  outline:3px solid #86b7f3;
+  outline-offset:3px;
+}
+.response-card .card-footer .actions { margin-top:8px; }
 @media(max-width:760px) {
   .stats,.responses-grid { grid-template-columns:1fr; }
   .panel { padding:20px; }
-  .auth-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:480px){
+  .container{padding:0 14px;}
+  .hero{padding:38px 0 45px;}
+  .btn{width:100%;}
 }
 </style>
 </head>
@@ -268,60 +260,70 @@ footer {
 
 <header class="hero">
   <div class="container">
-    <span class="eyebrow">Exercice 08 · Intelligence artificielle</span>
+    <span class="eyebrow">
+      Exercice 08 · Intelligence artificielle
+    </span>
     <h1>Gathering Evidence</h1>
     <p>
-      Interface de gestion et d'exploration des réponses
-      produites par les modèles d'intelligence artificielle.
+      Explorer les réponses des modèles d'intelligence
+      artificielle et accéder à leur gestion sécurisée
+      dans Omeka S.
     </p>
     <span class="hero-label">
-      Projet Artificial Inquiries · Omeka S
+      Artificial Inquiries · Université Paris 8 · Omeka S
     </span>
   </div>
 </header>
 
 <main class="container">
 
-<section class="panel">
+<section class="panel" aria-labelledby="overviewTitle">
   <div class="section-heading">
     <div>
-      <h2>Vue d'ensemble</h2>
-      <p>Connexion à la base Omeka S commune.</p>
+      <h2 id="overviewTitle">Vue d'ensemble</h2>
+      <p>Exercice 8 — ressource Omeka S n° 24.</p>
     </div>
-    <button id="refreshButton" class="btn btn-secondary">
+    <button id="refreshButton" type="button"
+            class="btn btn-secondary">
       ↻ Actualiser
     </button>
   </div>
 
-  <div id="connectionStatus" class="status-box" role="status">
-    Connexion en cours...
+  <div id="connectionStatus" class="status-box"
+       role="status" aria-live="polite">
+    Connexion en cours…
   </div>
 
   <div class="stats">
     <div class="stat">
       <span id="totalCount" class="stat-number">—</span>
-      <span class="stat-label">Réponses affichées</span>
+      <span class="stat-label">
+        Réponses de l'exercice 8
+      </span>
     </div>
     <div class="stat">
       <span id="modelCount" class="stat-number">—</span>
-      <span class="stat-label">Modèles liés</span>
+      <span class="stat-label">
+        Modèles LLM liés
+      </span>
     </div>
     <div class="stat">
-      <span id="accessStatus" class="stat-number">Lecture</span>
-      <span class="stat-label">Mode d'accès</span>
+      <span id="accessStatus" class="stat-number">
+        Lecture
+      </span>
+      <span class="stat-label">Accès public</span>
     </div>
   </div>
 
   <div class="actions">
-    <a class="btn btn-secondary"
-       href="https://humanum-p8.fr/omk_artificialinquiries/admin"
-       target="_blank" rel="noopener noreferrer">
-      Administration Omeka S
-    </a>
     <a class="btn"
-       href="https://humanum-p8.fr/omk_artificialinquiries/admin/item/add"
+       href="https://maroua-artinq8.alwaysdata.net/api/login.php">
+      Se connecter pour gérer les réponses
+    </a>
+    <a class="btn btn-secondary"
+       href="https://humanum-p8.fr/omk_artificialinquiries/admin/item/24"
        target="_blank" rel="noopener noreferrer">
-      Ajouter une réponse dans Omeka S
+      Voir l'exercice dans Omeka S
     </a>
   </div>
 </section>
@@ -329,96 +331,108 @@ footer {
 <section class="panel" aria-labelledby="authTitle">
   <div class="section-heading">
     <div>
-      <h2 id="authTitle">Authentification</h2>
-      <p>Modes de connexion prévus pour l'exercice 8.</p>
+      <h2 id="authTitle">
+        Authentification et droits d'accès
+      </h2>
+      <p>Lecture publique, écriture protégée.</p>
     </div>
   </div>
 
-  <div class="auth-grid">
-    <div class="auth-method">
-      <strong>Omeka S</strong>
-      <small>À connecter à la passerelle</small>
-    </div>
-    <div class="auth-method">
-      <strong>GitHub</strong>
-      <small>OAuth non configuré</small>
-    </div>
-    <div class="auth-method">
-      <strong>Google</strong>
-      <small>OAuth non configuré</small>
-    </div>
-    <div class="auth-method">
-      <strong>CAS Paris 8</strong>
-      <small>CAS non configuré</small>
-    </div>
+  <p>
+    Les réponses publiques sont consultables ici sans connexion.
+    Pour créer, modifier ou supprimer une réponse, utilisez
+    la connexion sécurisée du serveur Alwaysdata
+    (session PHP).
+  </p>
+
+  <div class="actions">
+    <a class="btn"
+       href="https://maroua-artinq8.alwaysdata.net/api/login.php">
+      Connexion sécurisée
+    </a>
+    <a class="btn btn-secondary"
+       href="https://maroua-artinq8.alwaysdata.net/api/dashboard.php">
+      Tableau de bord
+    </a>
   </div>
 
   <p class="notice">
-    La consultation des réponses est publique.
-    Les connexions ci-dessus ne sont pas encore actives :
-    aucune clé API ni aucun mot de passe ne doit être saisi sur cette page.
+    Les connexions GitHub, Google et CAS Paris 8 ne sont
+    pas configurées. Aucun identifiant ni mot de passe
+    n'est demandé sur cette page GitHub Pages.
+    L'accès aux modifications nécessite un compte autorisé.
   </p>
 </section>
 
 <section class="panel" aria-labelledby="createTitle">
   <div class="section-heading">
     <div>
-      <h2 id="createTitle">Créer une réponse LLM</h2>
+      <h2 id="createTitle">
+        Créer et gérer les réponses LLM
+      </h2>
       <p>
-        Enregistrement sécurisé dans la base Omeka S commune
-        avec le Resource Template « Réponse d'un LLM » (18).
+        Opérations sur le serveur Alwaysdata, avec
+        enregistrement dans Omeka S
+        (classe 147, modèle de ressources 69).
       </p>
     </div>
   </div>
 
   <p>
-    Pour saisir le titre et le texte de votre réponse,
-    ouvrez le formulaire sécurisé sur Alwaysdata.
-    Une connexion peut être nécessaire.
+    Le formulaire et les outils de gestion sont protégés
+    par une session PHP. L'association automatique des
+    réponses aux modèles, aux tâches et à l'exercice 8
+    doit encore être finalisée côté serveur.
   </p>
 
   <div class="actions">
     <a class="btn"
        href="https://maroua-artinq8.alwaysdata.net/api/new-response.php">
-      Créer une réponse LLM
+      Créer une réponse
     </a>
     <a class="btn btn-secondary"
        href="https://maroua-artinq8.alwaysdata.net/api/manage-responses.php">
-      Gérer mes réponses LLM
+      Modifier / supprimer mes réponses
     </a>
   </div>
 
   <p class="notice">
-    Après l'enregistrement, revenez sur cette page
-    et cliquez sur « Actualiser » pour afficher
-    la réponse dans la bibliothèque.
+    Après une création, revenez ici et cliquez sur
+    « Actualiser ». Seules les réponses explicitement
+    liées à l'exercice 8 apparaissent dans cette bibliothèque.
   </p>
 </section>
 
-<section class="panel">
+<section class="panel" aria-labelledby="libraryTitle">
   <div class="section-heading">
     <div>
-      <h2>Bibliothèque des réponses</h2>
+      <h2 id="libraryTitle">Bibliothèque des réponses</h2>
       <p>
-        Ressources de type artinq:ReponseLLM
-        provenant de la base commune.
+        Ressources publiques <code>artinq:ReponseLLM</code>
+        liées à l'exercice 8 (item 24).
       </p>
     </div>
   </div>
 
   <div class="search-row">
+    <label for="search">Rechercher dans les réponses</label>
     <input id="search" type="search"
-           placeholder="Rechercher par titre, contenu ou identifiant...">
+           placeholder="Titre, contenu, identifiant, modèle ou tâche…"
+           autocomplete="off">
   </div>
 
-  <p id="visibleCount"></p>
-  <div id="responseList" class="responses-grid"></div>
+  <p id="visibleCount" class="helper" aria-live="polite"></p>
+  <div id="responseList" class="responses-grid"
+       aria-live="polite"></div>
 </section>
 
 </main>
 
 <footer>
   <strong>Artificial Inquiries — Gathering Evidence</strong>
+  <div>
+    Exercice 8 · Consultation publique · Gestion sécurisée
+  </div>
 </footer>
 
 <script>
@@ -427,86 +441,148 @@ footer {
 const OMEKA_BASE =
   "https://humanum-p8.fr/omk_artificialinquiries";
 
-const RESPONSE_CLASS_ID = 147;
-const RESPONSE_TEMPLATE_ID = 69;
-
 const API_URL =
   "https://maroua-artinq8.alwaysdata.net/api/responses.php";
+
+const RESPONSE_CLASS_ID = 147;
+const EXERCISE_ID = 24;
 
 let responses = [];
 
 const $ = id => document.getElementById(id);
 
-function getLiteral(item, property) {
-  const values = item[property];
+function literal(item, property) {
+  const values = item?.[property];
+
   if (!Array.isArray(values)) return "";
-  return values.find(value =>
-    typeof value["@value"] === "string"
+
+  return values.find(v =>
+    typeof v?.["@value"] === "string"
   )?.["@value"] || "";
 }
 
+function resourceValues(item, property) {
+  return Array.isArray(item?.[property])
+    ? item[property]
+    : [];
+}
+
+function linkedToExercise(item) {
+  return resourceValues(item, "artinq:porteSur").some(v =>
+    Number(v?.value_resource_id) === EXERCISE_ID ||
+    (
+      v?.type === "resource" &&
+      String(v?.["@id"] || "")
+        .endsWith("/items/" + EXERCISE_ID)
+    )
+  );
+}
+
+function relatedLabel(item, property) {
+  const v = resourceValues(item, property)[0];
+
+  return v?.display_title ||
+    v?.["@value"] ||
+    (
+      v?.value_resource_id
+        ? "Ressource #" + v.value_resource_id
+        : ""
+    );
+}
+
 function mapItem(item) {
-  const linkedModel = item["artinq:produitePar"]?.[0];
+  const modelValues =
+    resourceValues(item, "artinq:produitePar");
 
   return {
     id: Number(item["o:id"]),
-    title: getLiteral(item, "dcterms:title")
-      || item["o:title"] || "Sans titre",
-    identifier: getLiteral(item, "dcterms:identifier"),
-    content: getLiteral(item, "artinq:texte"),
-    status: getLiteral(item, "artinq:statut"),
-    model: linkedModel?.["o:title"] || "",
-    modelId: linkedModel?.value_resource_id || null,
-    templateId: item["o:resource_template"]?.["o:id"]
+    title:
+      literal(item, "dcterms:title") ||
+      item["o:title"] ||
+      "Sans titre",
+    identifier:
+      literal(item, "dcterms:identifier") ||
+      literal(item, "bibo:identifier"),
+    content:
+      literal(item, "artinq:texte") ||
+      literal(item, "dcterms:description"),
+    status: literal(item, "artinq:statut"),
+    model: relatedLabel(item, "artinq:produitePar"),
+    modelId:
+      Number(modelValues[0]?.value_resource_id) || null,
+    task: relatedLabel(item, "artinq:aPourTache"),
+    anonymousCode:
+      relatedLabel(item, "artinq:codeAnonyme")
   };
 }
 
 function setConnection(message, type = "") {
   const box = $("connectionStatus");
-  box.className = "status-box" + (type ? " " + type : "");
+  box.className =
+    "status-box" + (type ? " " + type : "");
   box.textContent = message;
 }
 
 async function loadResponses() {
-  $("responseList").textContent = "Chargement des réponses...";
-  setConnection("Connexion à la base Omeka S commune...");
+  $("refreshButton").disabled = true;
+  $("responseList").textContent =
+    "Chargement des réponses…";
+  $("visibleCount").textContent = "";
+
+  setConnection(
+    "Connexion à la base Omeka S commune…"
+  );
 
   try {
-    const response = await fetch(API_URL, {
+    const result = await fetch(API_URL, {
       method: "GET",
       cache: "no-store",
-      headers: { "Accept": "application/json" }
+      headers: {
+        "Accept": "application/json"
+      }
     });
 
-    if (!response.ok) {
-      throw new Error(`Erreur HTTP ${response.status}`);
+    if (!result.ok) {
+      throw new Error(
+        "Erreur HTTP " + result.status
+      );
     }
 
-    const data = await response.json();
+    const data = await result.json();
 
     if (!Array.isArray(data)) {
-      throw new Error("Format de réponse inattendu.");
+      throw new Error(
+        "Format de réponse inattendu."
+      );
     }
 
     responses = data
       .filter(item =>
-        item["o:resource_class"]?.["o:id"] === RESPONSE_CLASS_ID &&
-        item["o:resource_template"]?.["o:id"] === RESPONSE_TEMPLATE_ID
+        Number(
+          item?.["o:resource_class"]?.["o:id"]
+        ) === RESPONSE_CLASS_ID &&
+        linkedToExercise(item)
       )
       .map(mapItem);
 
-    $("totalCount").textContent = responses.length;
+    $("totalCount").textContent =
+      String(responses.length);
 
     $("modelCount").textContent =
-      new Set(
-        responses.map(r => r.modelId).filter(Boolean)
-      ).size;
+      String(
+        new Set(
+          responses
+            .map(r => r.modelId)
+            .filter(Boolean)
+        ).size
+      );
 
-    $("accessStatus").textContent = "API";
+    $("accessStatus").textContent = "Public";
 
     setConnection(
-      "Connexion réussie à la base Omeka S commune. " +
-      "Lecture réelle des ressources activée.",
+      "Connexion réussie à Omeka S. " +
+      responses.length +
+      " réponse(s) publique(s) liée(s) à l'exercice 8.",
       "success"
     );
 
@@ -520,38 +596,69 @@ async function loadResponses() {
     $("accessStatus").textContent = "Erreur";
 
     setConnection(
-      "Impossible de lire les réponses via la passerelle Alwaysdata. " +
-      "Détail : " + error.message,
+      "Lecture impossible via Alwaysdata : " +
+      error.message,
       "error"
     );
 
     $("responseList").textContent =
-      "La lecture de l'API a échoué. " +
-      "Aucune donnée de démonstration n'est utilisée.";
+      "Les réponses ne peuvent pas être chargées " +
+      "pour le moment. Aucune donnée fictive " +
+      "n'est affichée.";
+
+  } finally {
+    $("refreshButton").disabled = false;
   }
+}
+
+function makeBadge(label) {
+  const element = document.createElement("span");
+  element.className = "badge";
+  element.textContent = label;
+  return element;
 }
 
 function renderResponses() {
   const list = $("responseList");
-  const query = $("search").value.trim().toLowerCase();
+
+  const query = $("search").value
+    .trim()
+    .toLocaleLowerCase("fr");
 
   list.replaceChildren();
 
   const filtered = responses.filter(r =>
-    [r.title, r.identifier, r.content, r.model, r.status]
-      .some(value =>
-        String(value || "").toLowerCase().includes(query)
-      )
+    [
+      r.title,
+      r.identifier,
+      r.content,
+      r.model,
+      r.task,
+      r.anonymousCode,
+      r.status
+    ].some(value =>
+      String(value || "")
+        .toLocaleLowerCase("fr")
+        .includes(query)
+    )
   );
 
   $("visibleCount").textContent =
-    filtered.length + " réponse(s) affichée(s)";
+    filtered.length +
+    " réponse(s) affichée(s) sur " +
+    responses.length;
 
   if (!filtered.length) {
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent =
-      "Aucune réponse LLM disponible dans la base commune.";
+
+    empty.textContent = query
+      ? "Aucune réponse ne correspond à cette recherche."
+      : "Aucune réponse publique n'est encore liée " +
+        "à l'exercice 8 (item 24). " +
+        "La connexion peut fonctionner même " +
+        "si la bibliothèque est vide.";
+
     list.appendChild(empty);
     return;
   }
@@ -576,43 +683,87 @@ function renderResponses() {
     badges.className = "badges";
 
     if (r.model) {
-      const model = document.createElement("span");
-      model.className = "badge";
-      model.textContent = "LLM : " + r.model;
-      badges.appendChild(model);
+      badges.appendChild(
+        makeBadge("LLM : " + r.model)
+      );
+    }
+
+    if (r.task) {
+      badges.appendChild(
+        makeBadge("Tâche : " + r.task)
+      );
+    }
+
+    if (r.anonymousCode) {
+      badges.appendChild(
+        makeBadge("Code : " + r.anonymousCode)
+      );
     }
 
     if (r.status) {
-      const status = document.createElement("span");
-      status.className = "badge";
-      status.textContent = "Statut : " + r.status;
-      badges.appendChild(status);
+      badges.appendChild(
+        makeBadge("Statut : " + r.status)
+      );
     }
 
     const content = document.createElement("p");
     content.className = "card-content";
-    content.textContent = r.content || "Aucun contenu.";
+    content.textContent =
+      r.content ||
+      "Aucun texte de réponse disponible.";
 
     const footer = document.createElement("div");
     footer.className = "card-footer";
 
-    const link = document.createElement("a");
-    link.className = "btn btn-secondary btn-small";
-    link.href = `${OMEKA_BASE}/admin/item/${r.id}`;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent =
-      "Voir / modifier / supprimer dans Omeka S";
+    const actions = document.createElement("div");
+    actions.className = "actions";
 
-    footer.appendChild(link);
+    const view = document.createElement("a");
+    view.className =
+      "btn btn-secondary btn-small";
 
-    card.append(top, badges, content, footer);
+    view.href =
+      OMEKA_BASE +
+      "/item/" +
+      encodeURIComponent(r.id);
+
+    view.target = "_blank";
+    view.rel = "noopener noreferrer";
+    view.textContent = "Voir dans Omeka S";
+
+    const manage = document.createElement("a");
+    manage.className =
+      "btn btn-secondary btn-small";
+
+    manage.href =
+      "https://maroua-artinq8.alwaysdata.net/api/manage-responses.php";
+
+    manage.textContent =
+      "Gérer (connexion requise)";
+
+    actions.append(view, manage);
+    footer.appendChild(actions);
+
+    card.append(
+      top,
+      badges,
+      content,
+      footer
+    );
+
     list.appendChild(card);
   });
 }
 
-$("refreshButton").addEventListener("click", loadResponses);
-$("search").addEventListener("input", renderResponses);
+$("refreshButton").addEventListener(
+  "click",
+  loadResponses
+);
+
+$("search").addEventListener(
+  "input",
+  renderResponses
+);
 
 loadResponses();
 </script>
