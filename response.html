@@ -4,8 +4,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Artificial Inquiries — Exercice 8 : consultation des réponses LLM liées à Omeka S et accès au CRUD sécurisé.">
+<meta name="description" content="Artificial Inquiries — Exercice 8 : consultation des réponses LLM, authentification Omeka S et opérations CRUD.">
 <title>Artificial Inquiries — Gathering Evidence</title>
+
 <style>
 :root {
   --navy:#14243d;
@@ -17,7 +18,9 @@
   --green:#18744d;
   --red:#b93f4d;
 }
+
 * { box-sizing:border-box; }
+
 body {
   margin:0;
   font-family:"Segoe UI",Arial,sans-serif;
@@ -25,18 +28,22 @@ body {
   color:var(--text);
   line-height:1.6;
 }
+
 button,input,textarea { font:inherit; }
 button { cursor:pointer; }
+
 .container {
   max-width:1180px;
   margin:auto;
   padding:0 24px;
 }
+
 .hero {
   background:linear-gradient(125deg,#14243d,#284d79);
   color:white;
   padding:57px 0 65px;
 }
+
 .eyebrow {
   color:#c4d7f0;
   font-size:12px;
@@ -44,14 +51,17 @@ button { cursor:pointer; }
   text-transform:uppercase;
   letter-spacing:2px;
 }
+
 .hero h1 {
   margin:10px 0 0;
   font-size:clamp(32px,5vw,49px);
 }
+
 .hero p {
   max-width:660px;
   color:#d9e5f3;
 }
+
 .hero-label {
   display:inline-block;
   margin-top:15px;
@@ -61,10 +71,12 @@ button { cursor:pointer; }
   border-radius:30px;
   font-size:12px;
 }
+
 main {
   padding-top:34px!important;
   padding-bottom:55px!important;
 }
+
 .panel {
   background:white;
   border:1px solid var(--border);
@@ -73,6 +85,7 @@ main {
   box-shadow:0 8px 30px rgba(22,43,70,.055);
   margin-bottom:25px;
 }
+
 .section-heading {
   display:flex;
   justify-content:space-between;
@@ -81,16 +94,19 @@ main {
   gap:15px;
   margin-bottom:22px;
 }
+
 .section-heading h2 {
   margin:0;
   color:var(--navy);
   font-size:21px;
 }
+
 .section-heading p {
   margin:5px 0 0;
   font-size:13px;
   color:var(--muted);
 }
+
 .status-box {
   padding:15px 18px;
   border-radius:10px;
@@ -99,38 +115,45 @@ main {
   border:1px solid #d8e7f7;
   font-size:14px;
 }
+
 .status-box.success {
   background:#e8f7ef;
   color:var(--green);
   border-color:#c8e9d6;
 }
+
 .status-box.error {
   background:#fcecef;
   color:var(--red);
   border-color:#f4cbd1;
 }
+
 .stats {
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:16px;
   margin:22px 0;
 }
+
 .stat {
   border:1px solid var(--border);
   border-radius:12px;
   padding:19px;
   background:#fbfcfe;
 }
+
 .stat-number {
   display:block;
   font-size:29px;
   font-weight:750;
   color:var(--navy);
 }
+
 .stat-label {
   font-size:12px;
   color:var(--muted);
 }
+
 .btn {
   display:inline-flex;
   align-items:center;
@@ -143,33 +166,56 @@ main {
   font-weight:650;
   font-size:13px;
   text-decoration:none;
+  transition:background .2s;
 }
+
+.btn:hover {
+  background:#284d79;
+}
+
 .btn-secondary {
   background:#edf2f8;
   color:#203a5e;
   border-color:#e0e7f0;
 }
+
+.btn-secondary:hover {
+  background:#dce7f4;
+}
+
 .btn-small {
   padding:8px 13px;
   font-size:12px;
 }
+
+.btn:disabled {
+  opacity:.6;
+  cursor:wait;
+}
+
 .actions {
   display:flex;
   flex-wrap:wrap;
   gap:10px;
 }
-.search-row { margin-bottom:23px; }
+
+.search-row {
+  margin-bottom:23px;
+}
+
 .search-row input {
   width:100%;
   border:1px solid #cfd9e6;
   border-radius:9px;
   padding:12px 14px;
 }
+
 .responses-grid {
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:18px;
 }
+
 .response-card {
   border:1px solid var(--border);
   border-radius:13px;
@@ -177,11 +223,13 @@ main {
   background:white;
   min-width:0;
 }
+
 .response-card h3 {
   margin:0 0 13px;
   color:var(--navy);
   overflow-wrap:anywhere;
 }
+
 .id-badge {
   background:#f0f3f8;
   color:#64748b;
@@ -189,17 +237,21 @@ main {
   padding:4px 8px;
   font-size:11px;
 }
+
 .card-top {
   display:flex;
   justify-content:space-between;
+  align-items:flex-start;
   gap:12px;
 }
+
 .badges {
   display:flex;
   flex-wrap:wrap;
   gap:7px;
   margin-bottom:16px;
 }
+
 .badge {
   background:#eaf1fa;
   color:#315c8e;
@@ -207,17 +259,20 @@ main {
   padding:5px 9px;
   font-size:11px;
 }
+
 .card-content {
   white-space:pre-wrap;
   overflow-wrap:anywhere;
   color:#47566b;
   font-size:14px;
 }
+
 .card-footer {
   border-top:1px solid var(--border);
   padding-top:15px;
   margin-top:18px;
 }
+
 .empty {
   grid-column:1/-1;
   text-align:center;
@@ -226,36 +281,127 @@ main {
   border:1px dashed var(--border);
   border-radius:12px;
 }
+
 footer {
   text-align:center;
   padding:30px;
   color:var(--muted);
   border-top:1px solid var(--border);
 }
+
 .notice {
   margin-top:16px;
   font-size:13px;
   color:var(--muted);
 }
-.toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
-.helper { font-size:13px; color:var(--muted); margin:12px 0 0; }
-.card-meta { font-size:12px; color:var(--muted); margin:0 0 10px; }
+
+.toolbar {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+}
+
+.helper {
+  font-size:13px;
+  color:var(--muted);
+  margin:12px 0;
+}
+
+.card-meta {
+  font-size:12px;
+  color:var(--muted);
+  margin:0 0 10px;
+}
+
+.instructions {
+  background:#f5f8fc;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:18px 22px;
+  margin:20px 0;
+  font-size:14px;
+}
+
+.instructions h3 {
+  margin:0 0 10px;
+  color:var(--navy);
+  font-size:16px;
+}
+
+.instructions ol {
+  margin:0;
+  padding-left:22px;
+}
+
+.instructions li {
+  margin:7px 0;
+}
+
+.crud-grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  margin:20px 0;
+}
+
+.crud-item {
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#fbfcfe;
+  padding:16px;
+}
+
+.crud-item strong {
+  display:block;
+  color:var(--navy);
+  margin-bottom:5px;
+}
+
+.crud-item span {
+  font-size:12px;
+  color:var(--muted);
+}
+
 .btn:focus-visible,input:focus-visible {
   outline:3px solid #86b7f3;
   outline-offset:3px;
 }
-.response-card .card-footer .actions { margin-top:8px; }
-@media(max-width:760px) {
-  .stats,.responses-grid { grid-template-columns:1fr; }
-  .panel { padding:20px; }
+
+.response-card .card-footer .actions {
+  margin-top:8px;
 }
-@media(max-width:480px){
-  .container{padding:0 14px;}
-  .hero{padding:38px 0 45px;}
-  .btn{width:100%;}
+
+@media(max-width:760px) {
+  .stats,.responses-grid {
+    grid-template-columns:1fr;
+  }
+
+  .crud-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .panel {
+    padding:20px;
+  }
+}
+
+@media(max-width:480px) {
+  .container {
+    padding:0 14px;
+  }
+
+  .hero {
+    padding:38px 0 45px;
+  }
+
+  .btn {
+    width:100%;
+  }
 }
 </style>
 </head>
+
 <body>
 
 <header class="hero">
@@ -263,12 +409,16 @@ footer {
     <span class="eyebrow">
       Exercice 08 · Intelligence artificielle
     </span>
+
     <h1>Gathering Evidence</h1>
+
     <p>
       Explorer les réponses des modèles d'intelligence
-      artificielle et accéder à leur gestion sécurisée
-      dans Omeka S.
+      artificielle, consulter les ressources de la base
+      Omeka S partagée et accéder aux opérations de
+      gestion authentifiées.
     </p>
+
     <span class="hero-label">
       Artificial Inquiries · Université Paris 8 · Omeka S
     </span>
@@ -278,161 +428,368 @@ footer {
 <main class="container">
 
 <section class="panel" aria-labelledby="overviewTitle">
+
   <div class="section-heading">
     <div>
       <h2 id="overviewTitle">Vue d'ensemble</h2>
       <p>Exercice 8 — ressource Omeka S n° 24.</p>
     </div>
-    <button id="refreshButton" type="button"
+
+    <button id="refreshButton"
+            type="button"
             class="btn btn-secondary">
       ↻ Actualiser
     </button>
   </div>
 
-  <div id="connectionStatus" class="status-box"
-       role="status" aria-live="polite">
+  <div id="connectionStatus"
+       class="status-box"
+       role="status"
+       aria-live="polite">
     Connexion en cours…
   </div>
 
   <div class="stats">
+
     <div class="stat">
       <span id="totalCount" class="stat-number">—</span>
       <span class="stat-label">
-        Réponses de l'exercice 8
+        Réponses de l'exercice 8 chargées
       </span>
     </div>
+
     <div class="stat">
       <span id="modelCount" class="stat-number">—</span>
       <span class="stat-label">
         Modèles LLM liés
       </span>
     </div>
+
     <div class="stat">
       <span id="accessStatus" class="stat-number">
         Lecture
       </span>
-      <span class="stat-label">Accès public</span>
+      <span class="stat-label">
+        Accès public
+      </span>
     </div>
+
   </div>
 
   <div class="actions">
+
     <a class="btn"
-       href="https://maroua-artinq8.alwaysdata.net/api/login.php">
-      Se connecter pour gérer les réponses
+       href="https://maroua-artinq8.alwaysdata.net/api/login-omeka.php">
+      Se connecter avec Omeka S
     </a>
+
     <a class="btn btn-secondary"
        href="https://humanum-p8.fr/omk_artificialinquiries/admin/item/24"
-       target="_blank" rel="noopener noreferrer">
+       target="_blank"
+       rel="noopener noreferrer">
       Voir l'exercice dans Omeka S
     </a>
+
+    <a class="btn btn-secondary"
+       href="https://humanum-p8.fr/omk_artificialinquiries/api/items/24"
+       target="_blank"
+       rel="noopener noreferrer">
+      Consulter la ressource API
+    </a>
+
   </div>
+
 </section>
 
 <section class="panel" aria-labelledby="authTitle">
+
   <div class="section-heading">
     <div>
       <h2 id="authTitle">
         Authentification et droits d'accès
       </h2>
-      <p>Lecture publique, écriture protégée.</p>
+      <p>
+        Authentification Omeka S · Session PHP · Accès protégé
+      </p>
     </div>
   </div>
 
   <p>
-    Les réponses publiques sont consultables ici sans connexion.
-    Pour créer, modifier ou supprimer une réponse, utilisez
-    la connexion sécurisée du serveur Alwaysdata
-    (session PHP).
+    Les réponses publiques sont consultables sans connexion.
+    Pour créer, modifier ou supprimer une réponse,
+    connectez-vous avec les clés API personnelles de votre
+    compte sur l'instance Omeka S partagée.
   </p>
 
+  <div class="instructions">
+
+    <h3>Comment se connecter ?</h3>
+
+    <ol>
+      <li>
+        Connectez-vous à votre compte sur
+        <a href="https://humanum-p8.fr/omk_artificialinquiries/admin"
+           target="_blank"
+           rel="noopener noreferrer">
+          l'instance Omeka S partagée
+        </a>.
+      </li>
+
+      <li>
+        Accédez à votre profil utilisateur, puis à la
+        rubrique des clés API, si votre compte le permet.
+      </li>
+
+      <li>
+        Utilisez vos propres clés API ou générez-en
+        de nouvelles si nécessaire.
+      </li>
+
+      <li>
+        Cliquez sur « Se connecter avec Omeka S ».
+      </li>
+
+      <li>
+        Renseignez votre Key Identity et votre
+        Key Credential dans le formulaire de connexion
+        hébergé sur Alwaysdata.
+      </li>
+
+      <li>
+        Après validation, accédez au tableau de bord
+        et aux opérations de gestion des réponses.
+      </li>
+    </ol>
+
+  </div>
+
   <div class="actions">
+
     <a class="btn"
-       href="https://maroua-artinq8.alwaysdata.net/api/login.php">
-      Connexion sécurisée
+       href="https://maroua-artinq8.alwaysdata.net/api/login-omeka.php">
+      Se connecter avec Omeka S
     </a>
+
     <a class="btn btn-secondary"
        href="https://maroua-artinq8.alwaysdata.net/api/dashboard.php">
       Tableau de bord
     </a>
+
   </div>
 
   <p class="notice">
-    Les connexions GitHub, Google et CAS Paris 8 ne sont
-    pas configurées. Aucun identifiant ni mot de passe
-    n'est demandé sur cette page GitHub Pages.
-    L'accès aux modifications nécessite un compte autorisé.
+    Les clés API sont transmises au backend PHP via HTTPS.
+    Elles ne sont pas intégrées au code public GitHub Pages.
+    Les opérations sont soumises aux permissions du compte
+    Omeka S utilisé. Les connexions GitHub, Google et CAS
+    ne sont pas configurées.
   </p>
+
 </section>
 
 <section class="panel" aria-labelledby="createTitle">
+
   <div class="section-heading">
     <div>
       <h2 id="createTitle">
         Créer et gérer les réponses LLM
       </h2>
+
       <p>
-        Opérations sur le serveur Alwaysdata, avec
-        enregistrement dans Omeka S
-        (classe 147, modèle de ressources 69).
+        Opérations CRUD via le backend PHP et l'API
+        REST de l'instance Omeka S partagée.
       </p>
     </div>
   </div>
 
   <p>
-    Le formulaire et les outils de gestion sont protégés
-    par une session PHP. L'association automatique des
-    réponses aux modèles, aux tâches et à l'exercice 8
-    doit encore être finalisée côté serveur.
+    Les opérations de création, de consultation,
+    de modification et de suppression utilisent
+    les données réelles d'Omeka S.
+    Aucune modification fictive en mémoire du navigateur
+    n'est utilisée.
   </p>
 
+  <div class="crud-grid">
+
+    <div class="crud-item">
+      <strong>Create</strong>
+      <span>Créer une réponse dans Omeka S.</span>
+    </div>
+
+    <div class="crud-item">
+      <strong>Read</strong>
+      <span>Consulter les réponses publiques.</span>
+    </div>
+
+    <div class="crud-item">
+      <strong>Update</strong>
+      <span>Modifier une réponse autorisée.</span>
+    </div>
+
+    <div class="crud-item">
+      <strong>Delete</strong>
+      <span>Supprimer une réponse autorisée.</span>
+    </div>
+
+  </div>
+
   <div class="actions">
+
     <a class="btn"
        href="https://maroua-artinq8.alwaysdata.net/api/new-response.php">
       Créer une réponse
     </a>
+
+    <a class="btn btn-secondary"
+       href="#libraryTitle">
+      Consulter les réponses
+    </a>
+
     <a class="btn btn-secondary"
        href="https://maroua-artinq8.alwaysdata.net/api/manage-responses.php">
       Modifier / supprimer mes réponses
     </a>
+
+  </div>
+
+  <div class="instructions">
+
+    <h3>Procédure de test du CRUD</h3>
+
+    <ol>
+      <li>
+        Connectez-vous avec vos propres clés API Omeka S.
+      </li>
+
+      <li>
+        Cliquez sur « Créer une réponse » et renseignez
+        le titre, l'identifiant de tâche, le code animal
+        et le contenu.
+      </li>
+
+      <li>
+        Enregistrez la réponse dans Omeka S.
+      </li>
+
+      <li>
+        Revenez sur cette page et cliquez sur
+        « Actualiser » pour consulter la réponse publique.
+      </li>
+
+      <li>
+        Sans vous déconnecter, ouvrez
+        « Modifier / supprimer mes réponses ».
+      </li>
+
+      <li>
+        Sélectionnez la réponse créée, modifiez son
+        contenu et enregistrez les modifications.
+      </li>
+
+      <li>
+        Supprimez uniquement votre réponse de test.
+      </li>
+
+      <li>
+        Actualisez la bibliothèque pour vérifier
+        la disparition de cette réponse.
+      </li>
+    </ol>
+
   </div>
 
   <p class="notice">
-    Après une création, revenez ici et cliquez sur
-    « Actualiser ». Seules les réponses explicitement
-    liées à l'exercice 8 apparaissent dans cette bibliothèque.
+    Pour protéger les données des autres utilisateurs,
+    les modifications et suppressions depuis cette
+    interface sont limitées aux réponses créées pendant
+    la session Omeka S courante, sous réserve des
+    permissions du compte. Effectuez donc les tests
+    de création, modification et suppression avant
+    de vous déconnecter.
   </p>
+
+  <p class="notice">
+    Les réponses créées sont associées à l'exercice 8
+    (item 24). L'identifiant de tâche et le code animal
+    sont enregistrés dans l'identifiant de la réponse.
+    Les relations vers les ressources de tâche et de
+    modèle sont affichées lorsqu'elles sont présentes
+    dans Omeka S.
+  </p>
+
 </section>
 
 <section class="panel" aria-labelledby="libraryTitle">
+
   <div class="section-heading">
     <div>
-      <h2 id="libraryTitle">Bibliothèque des réponses</h2>
+      <h2 id="libraryTitle">
+        Bibliothèque des réponses
+      </h2>
+
       <p>
-        Ressources publiques <code>artinq:ReponseLLM</code>
+        Ressources publiques
+        <code>artinq:ReponseLLM</code>
         liées à l'exercice 8 (item 24).
       </p>
     </div>
+
+    <button id="libraryRefreshButton"
+            type="button"
+            class="btn btn-secondary">
+      ↻ Actualiser
+    </button>
+
   </div>
 
   <div class="search-row">
-    <label for="search">Rechercher dans les réponses</label>
-    <input id="search" type="search"
+
+    <label for="search">
+      Rechercher dans les réponses
+    </label>
+
+    <input id="search"
+           type="search"
            placeholder="Titre, contenu, identifiant, modèle ou tâche…"
            autocomplete="off">
+
   </div>
 
-  <p id="visibleCount" class="helper" aria-live="polite"></p>
-  <div id="responseList" class="responses-grid"
+  <p id="visibleCount"
+     class="helper"
+     aria-live="polite"></p>
+
+  <div id="responseList"
+       class="responses-grid"
        aria-live="polite"></div>
+
 </section>
 
 </main>
 
 <footer>
-  <strong>Artificial Inquiries — Gathering Evidence</strong>
+
+  <strong>
+    Artificial Inquiries — Gathering Evidence
+  </strong>
+
   <div>
-    Exercice 8 · Consultation publique · Gestion sécurisée
+    Exercice 8 · Université Paris 8 · Omeka S
   </div>
+
+  <div>
+    Consultation publique · Authentification Omeka S · CRUD
+  </div>
+
+  <p>
+    <a href="https://github.com/MarouaBenjelloun/ArtificialInquiries_8"
+       target="_blank"
+       rel="noopener noreferrer">
+      Code source du projet
+    </a>
+  </p>
+
 </footer>
 
 <script>
@@ -441,20 +798,28 @@ footer {
 const OMEKA_BASE =
   "https://humanum-p8.fr/omk_artificialinquiries";
 
+const BACKEND_BASE =
+  "https://maroua-artinq8.alwaysdata.net/api";
+
 const API_URL =
-  "https://maroua-artinq8.alwaysdata.net/api/responses.php";
+  BACKEND_BASE + "/responses.php";
 
 const RESPONSE_CLASS_ID = 147;
 const EXERCISE_ID = 24;
 
 let responses = [];
+let loading = false;
+let loadFailed = false;
 
 const $ = id => document.getElementById(id);
 
 function literal(item, property) {
+
   const values = item?.[property];
 
-  if (!Array.isArray(values)) return "";
+  if (!Array.isArray(values)) {
+    return "";
+  }
 
   return values.find(v =>
     typeof v?.["@value"] === "string"
@@ -462,23 +827,30 @@ function literal(item, property) {
 }
 
 function resourceValues(item, property) {
+
   return Array.isArray(item?.[property])
     ? item[property]
     : [];
 }
 
 function linkedToExercise(item) {
-  return resourceValues(item, "artinq:porteSur").some(v =>
+
+  return resourceValues(
+    item,
+    "artinq:porteSur"
+  ).some(v =>
+
     Number(v?.value_resource_id) === EXERCISE_ID ||
-    (
-      v?.type === "resource" &&
-      String(v?.["@id"] || "")
-        .endsWith("/items/" + EXERCISE_ID)
-    )
+
+    String(v?.["@id"] || "")
+      .replace(/\/$/, "")
+      .endsWith("/items/" + EXERCISE_ID)
+
   );
 }
 
 function relatedLabel(item, property) {
+
   const v = resourceValues(item, property)[0];
 
   return v?.display_title ||
@@ -491,79 +863,156 @@ function relatedLabel(item, property) {
 }
 
 function mapItem(item) {
+
   const modelValues =
     resourceValues(item, "artinq:produitePar");
 
+  const identifier =
+    literal(item, "dcterms:identifier") ||
+    literal(item, "bibo:identifier");
+
+  const identifierParts =
+    identifier.split("/");
+
+  const animalCodes = [
+    "giraffe",
+    "sloth",
+    "dragon",
+    "turkey"
+  ];
+
+  const identifierCode =
+    identifierParts.length === 2
+      ? identifierParts[1].trim().toLowerCase()
+      : "";
+
+  const fallbackCode =
+    animalCodes.includes(identifierCode)
+      ? identifierCode
+      : "";
+
+  const fallbackTask =
+    fallbackCode
+      ? identifierParts[0]
+      : "";
+
   return {
+
     id: Number(item["o:id"]),
+
     title:
       literal(item, "dcterms:title") ||
       item["o:title"] ||
       "Sans titre",
-    identifier:
-      literal(item, "dcterms:identifier") ||
-      literal(item, "bibo:identifier"),
+
+    identifier: identifier,
+
     content:
       literal(item, "artinq:texte") ||
       literal(item, "dcterms:description"),
-    status: literal(item, "artinq:statut"),
-    model: relatedLabel(item, "artinq:produitePar"),
+
+    status:
+      literal(item, "artinq:statut"),
+
+    model:
+      relatedLabel(item, "artinq:produitePar"),
+
     modelId:
       Number(modelValues[0]?.value_resource_id) || null,
-    task: relatedLabel(item, "artinq:aPourTache"),
+
+    task:
+      relatedLabel(item, "artinq:aPourTache") ||
+      fallbackTask,
+
     anonymousCode:
-      relatedLabel(item, "artinq:codeAnonyme")
+      relatedLabel(item, "artinq:codeAnonyme") ||
+      fallbackCode
+
   };
 }
 
 function setConnection(message, type = "") {
+
   const box = $("connectionStatus");
+
   box.className =
     "status-box" + (type ? " " + type : "");
+
   box.textContent = message;
 }
 
 async function loadResponses() {
+
+  if (loading) {
+    return;
+  }
+
+  loading = true;
+  loadFailed = false;
+
   $("refreshButton").disabled = true;
+  $("libraryRefreshButton").disabled = true;
+
   $("responseList").textContent =
     "Chargement des réponses…";
+
   $("visibleCount").textContent = "";
 
   setConnection(
-    "Connexion à la base Omeka S commune…"
+    "Connexion à la base Omeka S partagée…"
   );
 
   try {
+
     const result = await fetch(API_URL, {
+
       method: "GET",
+
       cache: "no-store",
+
       headers: {
         "Accept": "application/json"
       }
+
     });
 
     if (!result.ok) {
+
       throw new Error(
         "Erreur HTTP " + result.status
       );
+
     }
 
     const data = await result.json();
 
     if (!Array.isArray(data)) {
+
       throw new Error(
         "Format de réponse inattendu."
       );
+
     }
 
     responses = data
+
       .filter(item =>
+
         Number(
           item?.["o:resource_class"]?.["o:id"]
         ) === RESPONSE_CLASS_ID &&
+
         linkedToExercise(item)
+
       )
-      .map(mapItem);
+
+      .map(mapItem)
+
+      .filter(item =>
+        Number.isInteger(item.id) && item.id > 0
+      )
+
+      .sort((a,b) => b.id - a.id);
 
     $("totalCount").textContent =
       String(responses.length);
@@ -580,45 +1029,73 @@ async function loadResponses() {
     $("accessStatus").textContent = "Public";
 
     setConnection(
+
       "Connexion réussie à Omeka S. " +
+
       responses.length +
-      " réponse(s) publique(s) liée(s) à l'exercice 8.",
+
+      " réponse(s) publique(s) liée(s) à l'exercice 8 chargée(s).",
+
       "success"
+
     );
+
+    loading = false;
 
     renderResponses();
 
   } catch (error) {
+
     responses = [];
+    loadFailed = true;
 
     $("totalCount").textContent = "—";
     $("modelCount").textContent = "—";
     $("accessStatus").textContent = "Erreur";
 
     setConnection(
+
       "Lecture impossible via Alwaysdata : " +
       error.message,
+
       "error"
+
     );
 
     $("responseList").textContent =
+
       "Les réponses ne peuvent pas être chargées " +
-      "pour le moment. Aucune donnée fictive " +
-      "n'est affichée.";
+      "pour le moment. Cliquez sur Actualiser pour " +
+      "réessayer. Aucune donnée fictive n'est affichée.";
 
   } finally {
+
+    loading = false;
+
     $("refreshButton").disabled = false;
+    $("libraryRefreshButton").disabled = false;
+
   }
+
 }
 
 function makeBadge(label) {
-  const element = document.createElement("span");
+
+  const element =
+    document.createElement("span");
+
   element.className = "badge";
   element.textContent = label;
+
   return element;
 }
 
 function renderResponses() {
+
+  if (loading || loadFailed) {
+    return;
+  }
+
   const list = $("responseList");
 
   const query = $("search").value
@@ -628,6 +1105,7 @@ function renderResponses() {
   list.replaceChildren();
 
   const filtered = responses.filter(r =>
+
     [
       r.title,
       r.identifier,
@@ -637,125 +1115,203 @@ function renderResponses() {
       r.anonymousCode,
       r.status
     ].some(value =>
+
       String(value || "")
         .toLocaleLowerCase("fr")
         .includes(query)
+
     )
+
   );
 
   $("visibleCount").textContent =
+
     filtered.length +
+
     " réponse(s) affichée(s) sur " +
+
     responses.length;
 
   if (!filtered.length) {
-    const empty = document.createElement("div");
+
+    const empty =
+      document.createElement("div");
+
     empty.className = "empty";
 
     empty.textContent = query
+
       ? "Aucune réponse ne correspond à cette recherche."
-      : "Aucune réponse publique n'est encore liée " +
-        "à l'exercice 8 (item 24). " +
-        "La connexion peut fonctionner même " +
-        "si la bibliothèque est vide.";
+
+      : "Aucune réponse publique liée à l'exercice 8 " +
+        "n'a été chargée. Vous pouvez créer une réponse " +
+        "après authentification puis actualiser la bibliothèque.";
 
     list.appendChild(empty);
+
     return;
   }
 
   filtered.forEach(r => {
-    const card = document.createElement("article");
+
+    const card =
+      document.createElement("article");
+
     card.className = "response-card";
 
-    const top = document.createElement("div");
+    const top =
+      document.createElement("div");
+
     top.className = "card-top";
 
-    const heading = document.createElement("h3");
+    const heading =
+      document.createElement("h3");
+
     heading.textContent = r.title;
 
-    const id = document.createElement("span");
+    const id =
+      document.createElement("span");
+
     id.className = "id-badge";
     id.textContent = "#" + r.id;
 
     top.append(heading, id);
 
-    const badges = document.createElement("div");
+    const badges =
+      document.createElement("div");
+
     badges.className = "badges";
 
     if (r.model) {
+
       badges.appendChild(
         makeBadge("LLM : " + r.model)
       );
+
     }
 
     if (r.task) {
+
       badges.appendChild(
         makeBadge("Tâche : " + r.task)
       );
+
     }
 
     if (r.anonymousCode) {
+
       badges.appendChild(
         makeBadge("Code : " + r.anonymousCode)
       );
+
     }
 
     if (r.status) {
+
       badges.appendChild(
         makeBadge("Statut : " + r.status)
       );
+
     }
 
-    const content = document.createElement("p");
+    const metadata =
+      document.createElement("p");
+
+    metadata.className = "card-meta";
+
+    metadata.textContent = r.identifier
+
+      ? "Identifiant : " + r.identifier
+
+      : "";
+
+    const content =
+      document.createElement("p");
+
     content.className = "card-content";
+
     content.textContent =
+
       r.content ||
+
       "Aucun texte de réponse disponible.";
 
-    const footer = document.createElement("div");
+    const footer =
+      document.createElement("div");
+
     footer.className = "card-footer";
 
-    const actions = document.createElement("div");
+    const actions =
+      document.createElement("div");
+
     actions.className = "actions";
 
-    const view = document.createElement("a");
+    const view =
+      document.createElement("a");
+
     view.className =
       "btn btn-secondary btn-small";
 
     view.href =
+
       OMEKA_BASE +
-      "/item/" +
+
+      "/api/items/" +
+
       encodeURIComponent(r.id);
 
     view.target = "_blank";
-    view.rel = "noopener noreferrer";
-    view.textContent = "Voir dans Omeka S";
 
-    const manage = document.createElement("a");
-    manage.className =
+    view.rel = "noopener noreferrer";
+
+    view.textContent =
+      "Consulter la ressource API";
+
+    const viewAdmin =
+      document.createElement("a");
+
+    viewAdmin.className =
       "btn btn-secondary btn-small";
 
-    manage.href =
-      "https://maroua-artinq8.alwaysdata.net/api/manage-responses.php";
+    viewAdmin.href =
 
-    manage.textContent =
-      "Gérer (connexion requise)";
+      OMEKA_BASE +
 
-    actions.append(view, manage);
+      "/admin/item/" +
+
+      encodeURIComponent(r.id);
+
+    viewAdmin.target = "_blank";
+
+    viewAdmin.rel = "noopener noreferrer";
+
+    viewAdmin.textContent =
+      "Voir dans Omeka S";
+
+    actions.append(view, viewAdmin);
+
     footer.appendChild(actions);
 
     card.append(
       top,
       badges,
+      metadata,
       content,
       footer
     );
 
     list.appendChild(card);
+
   });
+
 }
 
 $("refreshButton").addEventListener(
+  "click",
+  loadResponses
+);
+
+$("libraryRefreshButton").addEventListener(
   "click",
   loadResponses
 );
@@ -766,6 +1322,7 @@ $("search").addEventListener(
 );
 
 loadResponses();
+
 </script>
 
 </body>
